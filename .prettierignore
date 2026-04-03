@@ -1,0 +1,9 @@
+node_modules
+.expo
+.expo-android-check
+.expo-web-check
+dist
+web-build
+android
+ios
+drizzle

@@ -1,0 +1,252 @@
+{
+  "packVersion": "1.0.0",
+  "exportedAt": "2026-03-18T07:45:00.000Z",
+  "session": {
+    "id": "session_grounded_mobile_ai",
+    "title": "Grounded Retrieval for Offline Lecture Assistants",
+    "courseCode": "CS-482",
+    "lecturer": "Dr. Maya Chen",
+    "description": "An applied lecture on designing audience-side assistants that stay grounded in offline lecture content.",
+    "location": "Auditorium A",
+    "startsAt": "2026-03-18T08:00:00.000Z",
+    "status": "live",
+    "tags": ["offline-first", "retrieval", "mobile-ai", "grounding"]
+  },
+  "materials": [
+    {
+      "id": "material_slides_grounding",
+      "title": "Lecture Slides: Grounded Retrieval",
+      "type": "slide_deck",
+      "sourceLabel": "slides-v1.pdf",
+      "contentText": "Slides covering grounded retrieval, source priority, unsupported handling, and offline system design.",
+      "orderIndex": 0,
+      "chunks": [
+        {
+          "id": "chunk_why_grounding",
+          "heading": "Why grounding matters",
+          "text": "Grounding constrains answers to verified lecture sources. It reduces hallucination because every answer must be justified by local evidence.",
+          "keywords": ["grounding", "hallucination", "evidence"],
+          "orderIndex": 0
+        },
+        {
+          "id": "chunk_source_priority",
+          "heading": "Source priority",
+          "text": "When evidence overlaps, the app should prioritize glossary terms first, lecture materials second, and transcript excerpts third.",
+          "keywords": ["source priority", "glossary", "materials", "transcript"],
+          "orderIndex": 1
+        },
+        {
+          "id": "chunk_unsupported_questions",
+          "heading": "Unsupported questions",
+          "text": "If no local evidence supports the question, the system must return a clear unsupported state instead of guessing or improvising.",
+          "keywords": ["unsupported", "fallback", "grounded answer"],
+          "orderIndex": 2
+        }
+      ]
+    },
+    {
+      "id": "material_handout_architecture",
+      "title": "Handout: Offline Architecture Checklist",
+      "type": "handout",
+      "sourceLabel": "architecture-checklist.md",
+      "contentText": "A concise handout covering the on-device architecture for mobile lecture assistants.",
+      "orderIndex": 1,
+      "chunks": [
+        {
+          "id": "chunk_offline_storage",
+          "heading": "Offline storage",
+          "text": "SQLite on device stores lecture sessions, materials, chunks, transcript entries, summaries, notes, bookmarks, and question-answer history.",
+          "keywords": ["sqlite", "offline", "storage"],
+          "orderIndex": 0
+        },
+        {
+          "id": "chunk_retrieval_pipeline",
+          "heading": "Retrieval pipeline",
+          "text": "A local retrieval pipeline should tokenize the question, score glossary and content matches, and only pass ranked lecture evidence into the answering step.",
+          "keywords": ["retrieval", "tokenize", "ranking"],
+          "orderIndex": 1
+        },
+        {
+          "id": "chunk_exam_focus",
+          "heading": "Exam focus",
+          "text": "For assessment prep, students should remember the grounding rule, the source-priority order, and the unsupported-question behavior.",
+          "keywords": ["exam", "assessment", "study"],
+          "orderIndex": 2
+        }
+      ]
+    }
+  ],
+  "glossary": [
+    {
+      "id": "glossary_grounding",
+      "term": "Grounding",
+      "aliases": ["grounded answering"],
+      "definition": "Grounding is the rule that an answer must be supported by the lecture pack's local evidence rather than outside knowledge.",
+      "orderIndex": 0
+    },
+    {
+      "id": "glossary_chunking",
+      "term": "Chunking",
+      "aliases": ["content chunking"],
+      "definition": "Chunking splits lecture material into smaller searchable passages so retrieval can rank the most relevant evidence.",
+      "orderIndex": 1
+    },
+    {
+      "id": "glossary_source_priority",
+      "term": "Source priority",
+      "aliases": ["evidence priority"],
+      "definition": "Source priority defines which lecture sources should be preferred first: glossary, then lecture materials, then transcript.",
+      "orderIndex": 2
+    },
+    {
+      "id": "glossary_unsupported",
+      "term": "Unsupported question",
+      "aliases": ["unsupported state"],
+      "definition": "An unsupported question is a question with insufficient local lecture evidence, so the system must clearly decline to answer.",
+      "orderIndex": 3
+    }
+  ],
+  "transcript": [
+    {
+      "id": "transcript_001",
+      "speakerLabel": "Dr. Maya Chen",
+      "text": "Our audience app is not a free-form chatbot. It behaves more like a constrained assistant over the lecture pack on the device.",
+      "startedAtSeconds": 45,
+      "orderIndex": 0
+    },
+    {
+      "id": "transcript_002",
+      "speakerLabel": "Dr. Maya Chen",
+      "text": "If the glossary defines the concept directly, use that before you lean on slides or transcript excerpts.",
+      "startedAtSeconds": 180,
+      "orderIndex": 1
+    },
+    {
+      "id": "transcript_003",
+      "speakerLabel": "Dr. Maya Chen",
+      "text": "Students should see an unsupported state when the evidence is missing, because pretending to know the answer is worse than saying not supported.",
+      "startedAtSeconds": 310,
+      "orderIndex": 2
+    },
+    {
+      "id": "transcript_004",
+      "speakerLabel": "Dr. Maya Chen",
+      "text": "Everything important for the session lives locally: notes, bookmarks, question history, and all the source content needed for retrieval.",
+      "startedAtSeconds": 470,
+      "orderIndex": 3
+    }
+  ],
+  "summaries": [
+    {
+      "id": "summary_seed_overview",
+      "kind": "overview",
+      "title": "Lecture overview",
+      "text": "The lecture defines grounded answering for offline lecture assistants, explains ranked local retrieval, and emphasizes explicit unsupported handling."
+    },
+    {
+      "id": "summary_seed_exam",
+      "kind": "exam_focus",
+      "title": "Exam focus",
+      "text": "Remember the glossary > materials > transcript ordering, the reason grounding matters, and the rule for unsupported questions."
+    }
+  ],
+  "qaCategories": [
+    {
+      "id": "category_concepts",
+      "key": "concepts",
+      "label": "Concepts",
+      "description": "Definitions, terminology, and core lecture concepts."
+    },
+    {
+      "id": "category_exam_prep",
+      "key": "exam_prep",
+      "label": "Exam Prep",
+      "description": "Assessment-oriented questions and revision prompts."
+    },
+    {
+      "id": "category_applications",
+      "key": "applications",
+      "label": "Applications",
+      "description": "How the lecture ideas apply in a real system."
+    },
+    {
+      "id": "category_logistics",
+      "key": "logistics",
+      "label": "Logistics",
+      "description": "Schedule, room, or session flow questions."
+    }
+  ],
+  "publicQa": [
+    {
+      "id": "public_question_001",
+      "categoryKey": "concepts",
+      "questionText": "Why does the app check glossary evidence before transcript snippets?",
+      "askedAt": "2026-03-18T08:11:00.000Z",
+      "answer": {
+        "id": "public_answer_001",
+        "text": "The app checks glossary evidence first because source priority says glossary definitions are the most authoritative local source, ahead of lecture materials and transcript excerpts.",
+        "confidenceScore": 0.93,
+        "sources": [
+          {
+            "sourceType": "glossary_term",
+            "sourceId": "glossary_source_priority"
+          },
+          {
+            "sourceType": "material_chunk",
+            "sourceId": "chunk_source_priority"
+          },
+          {
+            "sourceType": "transcript_entry",
+            "sourceId": "transcript_002"
+          }
+        ]
+      }
+    },
+    {
+      "id": "public_question_002",
+      "categoryKey": "applications",
+      "questionText": "What data is kept on the device for the lecture assistant to work offline?",
+      "askedAt": "2026-03-18T08:18:00.000Z",
+      "answer": {
+        "id": "public_answer_002",
+        "text": "The offline app keeps lecture sessions, materials, chunks, transcript entries, summaries, notes, bookmarks, and question-answer history in on-device SQLite storage.",
+        "confidenceScore": 0.91,
+        "sources": [
+          {
+            "sourceType": "material_chunk",
+            "sourceId": "chunk_offline_storage"
+          },
+          {
+            "sourceType": "transcript_entry",
+            "sourceId": "transcript_004"
+          }
+        ]
+      }
+    },
+    {
+      "id": "public_question_003",
+      "categoryKey": "exam_prep",
+      "questionText": "What should the system do with unsupported questions?",
+      "askedAt": "2026-03-18T08:27:00.000Z",
+      "answer": {
+        "id": "public_answer_003",
+        "text": "Unsupported questions must return a clear unsupported state. The system should not guess, improvise, or behave like a free-form chatbot.",
+        "confidenceScore": 0.95,
+        "sources": [
+          {
+            "sourceType": "glossary_term",
+            "sourceId": "glossary_unsupported"
+          },
+          {
+            "sourceType": "material_chunk",
+            "sourceId": "chunk_unsupported_questions"
+          },
+          {
+            "sourceType": "transcript_entry",
+            "sourceId": "transcript_003"
+          }
+        ]
+      }
+    }
+  ]
+}

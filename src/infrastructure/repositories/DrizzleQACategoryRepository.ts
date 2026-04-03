@@ -1,0 +1,36 @@
+import { and, asc, eq } from 'drizzle-orm';
+
+import type { QACategory } from '@domain/entities/QACategory';
+import type { QACategoryRepository } from '@domain/repository-contracts/QACategoryRepository';
+import type { AppDatabaseExecutor } from '@infrastructure/database/client';
+import { mapQACategoryRecord, toQACategoryInsert } from '@infrastructure/database/mappers';
+import { qaCategories } from '@infrastructure/database/schema';
+
+export class DrizzleQACategoryRepository implements QACategoryRepository {
+  constructor(private readonly db: AppDatabaseExecutor) {}
+
+  async listBySession(sessionId: string) {
+    const rows = await this.db.query.qaCategories.findMany({
+      where: eq(qaCategories.sessionId, sessionId),
+      orderBy: [asc(qaCategories.createdAt), asc(qaCategories.label), asc(qaCategories.id)],
+    });
+
+    return rows.map(mapQACategoryRecord);
+  }
+
+  async findByKey(sessionId: string, key: string) {
+    const row = await this.db.query.qaCategories.findFirst({
+      where: and(eq(qaCategories.sessionId, sessionId), eq(qaCategories.key, key)),
+    });
+
+    return row ? mapQACategoryRecord(row) : null;
+  }
+
+  async saveMany(categories: QACategory[]) {
+    if (!categories.length) {
+      return;
+    }
+
+    await this.db.insert(qaCategories).values(categories.map(toQACategoryInsert));
+  }
+}

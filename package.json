@@ -1,22 +1,51 @@
 {
-  "name": "gemma",
-  "version": "1.0.0",
-  "main": "index.ts",
+  "name": "lecture-companion",
+  "version": "0.1.0",
+  "main": "expo-router/entry",
   "scripts": {
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
-    "web": "expo start --web"
+    "web": "expo start --web",
+    "lint": "eslint . --ext .ts,.tsx --max-warnings=0",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "check": "npm run typecheck && npm run lint && npm run test",
+    "format": "prettier . --write",
+    "format:check": "prettier . --check",
+    "db:generate": "drizzle-kit generate --config=drizzle.config.ts && node scripts/buildDrizzleExpoMigrations.mjs",
+    "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
+    "@expo/vector-icons": "^15.0.3",
+    "drizzle-orm": "^0.45.2",
     "expo": "~54.0.33",
+    "expo-document-picker": "~14.0.8",
+    "expo-file-system": "~19.0.21",
+    "expo-router": "~6.0.23",
+    "expo-sqlite": "~16.0.10",
     "expo-status-bar": "~3.0.9",
     "react": "19.1.0",
-    "react-native": "0.81.5"
+    "react-dom": "19.1.0",
+    "react-native": "0.81.5",
+    "react-native-safe-area-context": "~5.6.0",
+    "react-native-screens": "~4.16.0",
+    "react-native-web": "^0.21.0",
+    "zod": "^4.3.6",
+    "zustand": "^5.0.12"
   },
   "devDependencies": {
+    "@types/node": "^25.5.2",
     "@types/react": "~19.1.0",
-    "typescript": "~5.9.2"
+    "babel-preset-expo": "~54.0.10",
+    "drizzle-kit": "^0.31.10",
+    "eslint": "^9.39.4",
+    "eslint-config-expo": "~10.0.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-expo": "^1.0.0",
+    "prettier": "^3.8.1",
+    "typescript": "~5.9.2",
+    "vitest": "^3.2.4"
   },
   "private": true
 }

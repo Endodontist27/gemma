@@ -5,9 +5,13 @@ node_modules/
 
 # Expo
 .expo/
+.expo-android-check/
+.expo-web-check/
 dist/
 web-build/
 expo-env.d.ts
+drizzle/meta/
+coverage/
 
 # Native
 .kotlin/
