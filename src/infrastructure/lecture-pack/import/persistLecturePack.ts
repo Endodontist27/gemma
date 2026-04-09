@@ -29,45 +29,47 @@ import type { LecturePackSessionGraph } from '@infrastructure/lecture-pack/impor
 
 export const persistLecturePack = (db: AppDatabase, graph: LecturePackSessionGraph): void => {
   db.transaction((tx) => {
-    tx.delete(lectureSessions).where(eq(lectureSessions.id, graph.session.id));
-    tx.insert(lectureSessions).values(toLectureSessionInsert(graph.session));
+    tx.delete(lectureSessions).where(eq(lectureSessions.id, graph.session.id)).run();
+    tx.insert(lectureSessions).values(toLectureSessionInsert(graph.session)).run();
 
     if (graph.categories.length) {
-      tx.insert(qaCategories).values(graph.categories.map(toQACategoryInsert));
+      tx.insert(qaCategories).values(graph.categories.map(toQACategoryInsert)).run();
     }
 
     if (graph.materials.length) {
-      tx.insert(lectureMaterials).values(graph.materials.map(toLectureMaterialInsert));
+      tx.insert(lectureMaterials).values(graph.materials.map(toLectureMaterialInsert)).run();
     }
 
     if (graph.chunks.length) {
-      tx.insert(materialChunks).values(graph.chunks.map(toMaterialChunkInsert));
+      tx.insert(materialChunks).values(graph.chunks.map(toMaterialChunkInsert)).run();
     }
 
     if (graph.glossary.length) {
-      tx.insert(glossaryTerms).values(graph.glossary.map(toGlossaryTermInsert));
+      tx.insert(glossaryTerms).values(graph.glossary.map(toGlossaryTermInsert)).run();
     }
 
     if (graph.transcript.length) {
-      tx.insert(transcriptEntries).values(graph.transcript.map(toTranscriptEntryInsert));
+      tx.insert(transcriptEntries).values(graph.transcript.map(toTranscriptEntryInsert)).run();
     }
 
     if (graph.summaries.length) {
-      tx.insert(summaries).values(graph.summaries.map(toSummaryInsert));
+      tx.insert(summaries).values(graph.summaries.map(toSummaryInsert)).run();
     }
 
     if (!graph.publicQuestions.length) {
       return;
     }
 
-    tx.insert(questions).values(
-      graph.publicQuestions.map(({ question }) => toQuestionInsert(question)),
-    );
-    tx.insert(answers).values(graph.publicQuestions.map(({ answer }) => toAnswerInsert(answer)));
+    tx.insert(questions)
+      .values(graph.publicQuestions.map(({ question }) => toQuestionInsert(question)))
+      .run();
+    tx.insert(answers)
+      .values(graph.publicQuestions.map(({ answer }) => toAnswerInsert(answer)))
+      .run();
 
     const flattenedSources = graph.publicQuestions.flatMap(({ sources }) => sources);
     if (flattenedSources.length) {
-      tx.insert(answerSources).values(flattenedSources.map(toAnswerSourceInsert));
+      tx.insert(answerSources).values(flattenedSources.map(toAnswerSourceInsert)).run();
     }
   });
 };

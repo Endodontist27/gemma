@@ -93,7 +93,7 @@ src/infrastructure/database/
 
 - stores user-authored local notes
 - belongs to `lecture_sessions`
-- supports anchor metadata for future deep-linking
+- supports session, glossary-term, material-chunk, and transcript-entry anchors
 
 ### `bookmarks`
 

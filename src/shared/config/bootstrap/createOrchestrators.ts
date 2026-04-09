@@ -1,13 +1,12 @@
 import { AppBootstrapOrchestrator } from '@application/orchestrators/AppBootstrapOrchestrator';
 import { LectureExperienceOrchestrator } from '@application/orchestrators/LectureExperienceOrchestrator';
-
 import type {
   AppOrchestrators,
   AppPorts,
   AppRepositories,
   AppServices,
   AppUseCases,
-} from '@app/bootstrap/types';
+} from '@/app-shell/bootstrap/types';
 
 export const createOrchestrators = (
   repositories: AppRepositories,
@@ -20,13 +19,14 @@ export const createOrchestrators = (
     repositories.lectureSessionRepository,
     repositories.summaryRepository,
     services.summarizationService,
+    services.gemmaAdapter,
     useCases.listLectureSessionsUseCase,
-    useCases.importLecturePackUseCase,
     ports.selectedSessionStore,
   ),
   lectureExperienceOrchestrator: new LectureExperienceOrchestrator(
     useCases.getSessionOverviewUseCase,
     useCases.askLectureQuestionUseCase,
     useCases.listCommunityFeedUseCase,
+    useCases.listQuestionHistoryUseCase,
   ),
 });

@@ -12,11 +12,29 @@ web-build/
 expo-env.d.ts
 drizzle/meta/
 coverage/
+models/**
+!models/google/
+!models/google/gemma-4-E2B-it/
+!models/google/gemma-4-E2B-it/README.md
+!models/google/gemma-4-E2B-it/manifest.json
+!models/google/gemma-4-E2B-it/source/
+!models/google/gemma-4-E2B-it/source/.gitkeep
+!models/google/gemma-4-E2B-it/android/
+!models/google/gemma-4-E2B-it/android/.gitkeep
+!models/google/gemma-4-E4B-it/
+!models/google/gemma-4-E4B-it/README.md
+!models/google/gemma-4-E4B-it/manifest.json
+!models/google/gemma-4-E4B-it/source/
+!models/google/gemma-4-E4B-it/source/.gitkeep
+.tmp/
+.venv-gemma-wsl/
+scripts/gemma/__pycache__/
 
 # Native
 .kotlin/
 *.orig.*
 *.jks
+keystore.properties
 *.p8
 *.p12
 *.key
@@ -24,6 +42,7 @@ coverage/
 
 # Metro
 .metro-health-check*
+.expo-run*.log
 
 # debug
 npm-debug.*
@@ -43,3 +62,4 @@ yarn-error.*
 # generated native folders
 /ios
 /android
+modules/**/build/

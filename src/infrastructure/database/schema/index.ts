@@ -13,3 +13,8 @@ export {
   questions,
 } from '@infrastructure/database/schema/qa';
 export { bookmarks, notes } from '@infrastructure/database/schema/notes';
+export {
+  assetDigests,
+  evidenceUnits,
+  uploadedAssets,
+} from '@infrastructure/database/schema/multimodal';

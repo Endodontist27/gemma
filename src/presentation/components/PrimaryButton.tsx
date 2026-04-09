@@ -1,4 +1,5 @@
 import { Pressable, StyleSheet, Text } from 'react-native';
+import { themeColors } from '@presentation/theme/tokens';
 
 interface PrimaryButtonProps {
   label: string;
@@ -32,31 +33,31 @@ export const PrimaryButton = ({
 
 const styles = StyleSheet.create({
   button: {
-    minHeight: 44,
-    borderRadius: 12,
+    minHeight: 48,
+    borderRadius: 14,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: 14,
+    paddingHorizontal: 16,
   },
   primaryButton: {
-    backgroundColor: '#1d4ed8',
+    backgroundColor: themeColors.primary,
   },
   secondaryButton: {
-    backgroundColor: '#eff6ff',
+    backgroundColor: themeColors.surface,
     borderWidth: 1,
-    borderColor: '#bfdbfe',
+    borderColor: themeColors.borderStrong,
   },
   disabled: {
-    opacity: 0.45,
+    opacity: 0.48,
   },
   label: {
     fontSize: 14,
-    fontWeight: '600',
+    fontWeight: '700',
   },
   primaryLabel: {
-    color: '#ffffff',
+    color: themeColors.surface,
   },
   secondaryLabel: {
-    color: '#1e3a8a',
+    color: themeColors.text,
   },
 });

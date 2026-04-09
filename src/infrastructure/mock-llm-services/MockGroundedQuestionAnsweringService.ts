@@ -14,7 +14,8 @@ export class MockGroundedQuestionAnsweringService implements QuestionAnsweringSe
   constructor(private readonly llmService: LLMService) {}
 
   async answerQuestion(
-    _questionText: string,
+    _sessionId: string,
+    questionText: string,
     retrieval: RetrievalResult,
     category: QACategory | null,
   ): Promise<GroundedAnswerDraft> {
@@ -33,6 +34,7 @@ export class MockGroundedQuestionAnsweringService implements QuestionAnsweringSe
     const answerText =
       (await this.llmService.generateText({
         mode: 'answer',
+        question: questionText,
         instruction: 'Condense the grounded lecture evidence into a short answer.',
         evidence: prioritizedMatches.map((match) => `${match.label}: ${match.excerpt}`),
       })) || prioritizedMatches[0].excerpt;

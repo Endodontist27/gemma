@@ -1,0 +1,13 @@
+{
+  "name": "gemma-runtime",
+  "version": "0.1.0",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "peerDependencies": {
+    "expo": "*",
+    "react-native": "*"
+  },
+  "dependencies": {
+    "expo-modules-core": "^3.0.21"
+  }
+}

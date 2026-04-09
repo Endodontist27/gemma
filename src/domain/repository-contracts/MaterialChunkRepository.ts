@@ -5,5 +5,6 @@ export interface MaterialChunkRepository {
   listBySession(sessionId: string): Promise<MaterialChunk[]>;
   /** Ordered by chunk order index, then stable id order. */
   listByMaterial(materialId: string): Promise<MaterialChunk[]>;
+  findById(id: string): Promise<MaterialChunk | null>;
   saveMany(chunks: MaterialChunk[]): Promise<void>;
 }

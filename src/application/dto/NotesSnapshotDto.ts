@@ -1,7 +1,7 @@
 import type { Bookmark } from '@domain/entities/Bookmark';
-import type { Note } from '@domain/entities/Note';
+import type { NoteListItemDto } from '@application/dto/NoteListItemDto';
 
 export interface NotesSnapshotDto {
-  notes: Note[];
+  notes: NoteListItemDto[];
   bookmarks: Bookmark[];
 }

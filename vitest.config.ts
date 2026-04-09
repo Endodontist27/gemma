@@ -14,6 +14,7 @@ export default defineConfig({
       '@domain': path.resolve(root, 'src/domain'),
       '@infrastructure': path.resolve(root, 'src/infrastructure'),
       '@shared': path.resolve(root, 'src/shared'),
+      '@models': path.resolve(root, 'models'),
     },
     extensions: ['.native.ts', '.web.ts', '.ts', '.tsx', '.mjs', '.js', '.jsx', '.json'],
   },

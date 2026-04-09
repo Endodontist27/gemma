@@ -3,11 +3,12 @@ export const appConfig = {
   database: {
     fileName: 'lecture-companion.db',
   },
-  demoPack: {
-    sourceLabel: 'bundled-demo-pack',
-  },
   retrieval: {
-    maxSources: 5,
-    supportThreshold: 1.1,
+    maxSources: 18,
+    supportThreshold: 1.0,
+  },
+  groundedAnswer: {
+    maxReasoningSources: 12,
+    maxTraceableSources: 6,
   },
 } as const;

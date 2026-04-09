@@ -13,146 +13,94 @@ import { DrizzleQuestionRepository } from '@infrastructure/repositories/DrizzleQ
 import { DrizzleSummaryRepository } from '@infrastructure/repositories/DrizzleSummaryRepository';
 import { DrizzleTranscriptEntryRepository } from '@infrastructure/repositories/DrizzleTranscriptEntryRepository';
 
-const expectQueryOrder = async (
-  execute: () => Promise<unknown>,
-  findMany: ReturnType<typeof vi.fn>,
-) => {
-  await execute();
-  expect(findMany).toHaveBeenCalledTimes(1);
-  expect(findMany.mock.calls[0]?.[0]?.orderBy).toBeDefined();
+const createSelectDbMock = (rows: unknown[] = []) => {
+  const orderBy = vi.fn().mockResolvedValue(rows);
+  const limit = vi.fn().mockResolvedValue(rows);
+  const where = vi.fn().mockReturnValue({ orderBy, limit });
+  const innerJoin = vi.fn().mockReturnValue({ where });
+  const from = vi.fn().mockReturnValue({ orderBy, where, innerJoin, limit });
+  const select = vi.fn().mockReturnValue({ from });
+
+  return {
+    db: {
+      select,
+    } as never,
+    spies: {
+      from,
+      innerJoin,
+      limit,
+      orderBy,
+      select,
+      where,
+    },
+  };
+};
+
+const expectOrderedSelect = async (execute: (db: never) => Promise<unknown>) => {
+  const { db, spies } = createSelectDbMock();
+  await execute(db);
+  expect(spies.orderBy).toHaveBeenCalledTimes(1);
 };
 
 describe('Repository ordering', () => {
-  it('configures explicit ordering for query-based list methods', async () => {
-    const answerFindMany = vi.fn().mockResolvedValue([]);
-    const answerSourceFindMany = vi.fn().mockResolvedValue([]);
-    const bookmarkFindMany = vi.fn().mockResolvedValue([]);
-    const glossaryFindMany = vi.fn().mockResolvedValue([]);
-    const materialFindMany = vi.fn().mockResolvedValue([]);
-    const sessionFindMany = vi.fn().mockResolvedValue([]);
-    const noteFindMany = vi.fn().mockResolvedValue([]);
-    const categoryFindMany = vi.fn().mockResolvedValue([]);
-    const questionFindMany = vi.fn().mockResolvedValue([]);
-    const summaryFindMany = vi.fn().mockResolvedValue([]);
-    const transcriptFindMany = vi.fn().mockResolvedValue([]);
-
-    const db = {
-      query: {
-        answers: { findMany: answerFindMany },
-        answerSources: { findMany: answerSourceFindMany },
-        bookmarks: { findMany: bookmarkFindMany },
-        glossaryTerms: { findMany: glossaryFindMany },
-        lectureMaterials: { findMany: materialFindMany },
-        lectureSessions: { findMany: sessionFindMany },
-        notes: { findMany: noteFindMany },
-        qaCategories: { findMany: categoryFindMany },
-        questions: { findMany: questionFindMany },
-        summaries: { findMany: summaryFindMany },
-        transcriptEntries: { findMany: transcriptFindMany },
-      },
-      select: vi.fn(),
-    } as never;
-
-    await expectQueryOrder(
-      () => new DrizzleAnswerRepository(db).listByQuestionIds(['question_1']),
-      answerFindMany,
+  it('configures explicit ordering for select-based list methods', async () => {
+    await expectOrderedSelect((db: never) =>
+      new DrizzleAnswerRepository(db).listByQuestionIds(['question_1']),
     );
-    await expectQueryOrder(
-      () => new DrizzleAnswerSourceRepository(db).listByAnswerId('answer_1'),
-      answerSourceFindMany,
+    await expectOrderedSelect((db: never) =>
+      new DrizzleAnswerSourceRepository(db).listByAnswerId('answer_1'),
     );
-    await expectQueryOrder(
-      () => new DrizzleBookmarkRepository(db).listBySession('session_1'),
-      bookmarkFindMany,
+    await expectOrderedSelect((db: never) =>
+      new DrizzleBookmarkRepository(db).listBySession('session_1'),
     );
-    await expectQueryOrder(
-      () => new DrizzleGlossaryTermRepository(db).listBySession('session_1'),
-      glossaryFindMany,
+    await expectOrderedSelect((db: never) =>
+      new DrizzleGlossaryTermRepository(db).listBySession('session_1'),
     );
-    await expectQueryOrder(
-      () => new DrizzleLectureMaterialRepository(db).listBySession('session_1'),
-      materialFindMany,
+    await expectOrderedSelect((db: never) =>
+      new DrizzleLectureMaterialRepository(db).listBySession('session_1'),
     );
-    await expectQueryOrder(() => new DrizzleLectureSessionRepository(db).list(), sessionFindMany);
-    await expectQueryOrder(
-      () => new DrizzleNoteRepository(db).listBySession('session_1'),
-      noteFindMany,
+    await expectOrderedSelect((db: never) => new DrizzleLectureSessionRepository(db).list());
+    await expectOrderedSelect((db: never) =>
+      new DrizzleNoteRepository(db).listBySession('session_1'),
     );
-    await expectQueryOrder(
-      () => new DrizzleQACategoryRepository(db).listBySession('session_1'),
-      categoryFindMany,
+    await expectOrderedSelect((db: never) =>
+      new DrizzleQACategoryRepository(db).listBySession('session_1'),
     );
-    await expectQueryOrder(
-      () => new DrizzleQuestionRepository(db).listBySession('session_1'),
-      questionFindMany,
+    await expectOrderedSelect((db: never) =>
+      new DrizzleQuestionRepository(db).listBySession('session_1'),
     );
-    await expectQueryOrder(
-      () => new DrizzleSummaryRepository(db).listBySession('session_1'),
-      summaryFindMany,
+    await expectOrderedSelect((db: never) =>
+      new DrizzleSummaryRepository(db).listBySession('session_1'),
     );
-    await expectQueryOrder(
-      () => new DrizzleTranscriptEntryRepository(db).listBySession('session_1'),
-      transcriptFindMany,
+    await expectOrderedSelect((db: never) =>
+      new DrizzleTranscriptEntryRepository(db).listBySession('session_1'),
     );
   });
 
   it('orders material chunks by material and chunk order for session-wide reads', async () => {
-    const orderBy = vi.fn().mockResolvedValue([]);
-    const where = vi.fn().mockReturnValue({ orderBy });
-    const innerJoin = vi.fn().mockReturnValue({ where });
-    const from = vi.fn().mockReturnValue({ innerJoin });
-    const select = vi.fn().mockReturnValue({ from });
-    const materialChunkFindMany = vi.fn().mockResolvedValue([]);
-    const db = {
-      select,
-      query: {
-        materialChunks: { findMany: materialChunkFindMany },
-      },
-    } as never;
+    const { db, spies } = createSelectDbMock();
     const repository = new DrizzleMaterialChunkRepository(db);
 
     await repository.listBySession('session_1');
     await repository.listByMaterial('material_1');
 
-    expect(orderBy).toHaveBeenCalledTimes(1);
-    expect(materialChunkFindMany).toHaveBeenCalledWith(
-      expect.objectContaining({
-        orderBy: expect.anything(),
-      }),
-    );
+    expect(spies.innerJoin).toHaveBeenCalledTimes(1);
+    expect(spies.orderBy).toHaveBeenCalledTimes(2);
   });
 
   it('orders answer sources consistently for multi-answer reads', async () => {
-    const findMany = vi.fn().mockResolvedValue([]);
-    const db = {
-      query: {
-        answerSources: { findMany },
-      },
-    } as never;
+    const { db, spies } = createSelectDbMock();
 
     await new DrizzleAnswerSourceRepository(db).listByAnswerIds(['answer_1', 'answer_2']);
 
-    expect(findMany).toHaveBeenCalledWith(
-      expect.objectContaining({
-        orderBy: expect.anything(),
-      }),
-    );
+    expect(spies.orderBy).toHaveBeenCalledTimes(1);
   });
 
   it('orders public questions consistently for community reads', async () => {
-    const findMany = vi.fn().mockResolvedValue([]);
-    const db = {
-      query: {
-        questions: { findMany },
-      },
-    } as never;
+    const { db, spies } = createSelectDbMock();
 
     await new DrizzleQuestionRepository(db).listPublicBySession('session_1');
 
-    expect(findMany).toHaveBeenCalledWith(
-      expect.objectContaining({
-        orderBy: expect.anything(),
-      }),
-    );
+    expect(spies.orderBy).toHaveBeenCalledTimes(1);
   });
 });

@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 
 import type { SessionOverviewDto } from '@application/dto/SessionOverviewDto';
-import { useAppContainer } from '@app/bootstrap/AppContainerContext';
 import { useAppStore } from '@presentation/hooks/useAppStore';
+import { useAppContainer } from '@/app-shell/bootstrap/AppContainerContext';
 
 export const useLiveViewModel = () => {
   const container = useAppContainer();
@@ -11,12 +11,24 @@ export const useLiveViewModel = () => {
   const contentVersion = useAppStore((state) => state.contentVersion);
 
   const [overview, setOverview] = useState<SessionOverviewDto | null>(null);
+  const [overviewSessionId, setOverviewSessionId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [reloadVersion, setReloadVersion] = useState(0);
+
+  useEffect(() => {
+    setOverview(null);
+    setOverviewSessionId(null);
+    setError(null);
+    setIsLoading(false);
+  }, [activeSessionId]);
 
   useEffect(() => {
     if (!activeSessionId) {
       setOverview(null);
+      setOverviewSessionId(null);
+      setError(null);
+      setIsLoading(false);
       return;
     }
 
@@ -29,6 +41,7 @@ export const useLiveViewModel = () => {
         const result = await lectureExperienceOrchestrator.getOverview(activeSessionId);
         if (!cancelled) {
           setOverview(result);
+          setOverviewSessionId(activeSessionId);
         }
       } catch (loadError) {
         if (!cancelled) {
@@ -46,12 +59,15 @@ export const useLiveViewModel = () => {
     return () => {
       cancelled = true;
     };
-  }, [activeSessionId, contentVersion, lectureExperienceOrchestrator]);
+  }, [activeSessionId, contentVersion, lectureExperienceOrchestrator, reloadVersion]);
 
   return {
     activeSessionId,
     error,
     isLoading,
-    overview,
+    overview: overviewSessionId === activeSessionId ? overview : null,
+    reloadOverview: () => {
+      setReloadVersion((value) => value + 1);
+    },
   };
 };

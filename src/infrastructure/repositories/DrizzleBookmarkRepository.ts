@@ -11,36 +11,55 @@ export class DrizzleBookmarkRepository implements BookmarkRepository {
   constructor(private readonly db: AppDatabaseExecutor) {}
 
   async listBySession(sessionId: string) {
-    const rows = await this.db.query.bookmarks.findMany({
-      where: eq(bookmarks.sessionId, sessionId),
-      orderBy: [
+    const rows = await this.db
+      .select()
+      .from(bookmarks)
+      .where(eq(bookmarks.sessionId, sessionId))
+      .orderBy(
         desc(bookmarks.createdAt),
         asc(bookmarks.targetType),
         asc(bookmarks.targetId),
         asc(bookmarks.id),
-      ],
-    });
+      );
 
     return rows.map(mapBookmarkRecord);
   }
 
   async findByTarget(sessionId: string, targetType: BookmarkTargetType, targetId: string) {
-    const row = await this.db.query.bookmarks.findFirst({
-      where: and(
-        eq(bookmarks.sessionId, sessionId),
-        eq(bookmarks.targetType, targetType),
-        eq(bookmarks.targetId, targetId),
-      ),
-    });
+    const rows = await this.db
+      .select()
+      .from(bookmarks)
+      .where(
+        and(
+          eq(bookmarks.sessionId, sessionId),
+          eq(bookmarks.targetType, targetType),
+          eq(bookmarks.targetId, targetId),
+        ),
+      )
+      .limit(1);
+    const row = rows[0];
 
     return row ? mapBookmarkRecord(row) : null;
   }
 
   async save(bookmark: Bookmark) {
-    await this.db.insert(bookmarks).values(toBookmarkInsert(bookmark));
+    await this.db
+      .insert(bookmarks)
+      .values(toBookmarkInsert(bookmark))
+      .onConflictDoUpdate({
+        target: bookmarks.id,
+        set: {
+          sessionId: bookmark.sessionId,
+          targetType: bookmark.targetType,
+          targetId: bookmark.targetId,
+          label: bookmark.label,
+          createdAt: bookmark.createdAt,
+        },
+      })
+      .run();
   }
 
   async delete(id: string) {
-    await this.db.delete(bookmarks).where(eq(bookmarks.id, id));
+    await this.db.delete(bookmarks).where(eq(bookmarks.id, id)).run();
   }
 }

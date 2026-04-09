@@ -1,7 +1,7 @@
 import { Tabs } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 
-import { tabMetadata } from '@app/navigation/tabs';
+import { tabMetadata } from '@/app-shell/navigation/tabs';
 
 export default function TabsLayout() {
   return (

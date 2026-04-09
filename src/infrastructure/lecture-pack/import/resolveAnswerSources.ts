@@ -8,6 +8,7 @@ const sourcePriorityScore: Record<AnswerSourceType, number> = {
   glossary_term: 2,
   material_chunk: 1.4,
   transcript_entry: 1,
+  evidence_unit: 1.2,
 };
 
 interface ResolveAnswerSourcesParams {
@@ -66,6 +67,20 @@ export const resolveAnswerSource = ({
       sourceRecordId: sourceId,
       label: `Material: ${source.heading}`,
       excerpt: source.text,
+      relevanceScore: sourcePriorityScore[sourceType],
+      createdAt,
+    };
+  }
+
+  if (sourceType === 'evidence_unit') {
+    return {
+      id: `${answerId}_src_${index}`,
+      answerId,
+      sessionId,
+      sourceType,
+      sourceRecordId: sourceId,
+      label: 'Indexed evidence',
+      excerpt: 'Indexed lecture evidence',
       relevanceScore: sourcePriorityScore[sourceType],
       createdAt,
     };

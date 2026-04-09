@@ -1,0 +1,22 @@
+{
+  "modelId": "google/gemma-4-E4B-it",
+  "purpose": "desktop-competition-demo",
+  "relativePath": "models/google/gemma-4-E4B-it/source",
+  "present": false,
+  "recommendedHardware": {
+    "gpu": "RTX 3060 12 GB or better",
+    "defaultQuantization": "bnb-4bit-nf4",
+    "fallbackQuantization": "bnb-8bit"
+  },
+  "runtime": {
+    "backend": "transformers",
+    "device": "cuda",
+    "maxContextTokens": 4096,
+    "maxNewTokens": 160
+  },
+  "notes": [
+    "Weights are not redistributed in git or Kaggle uploads.",
+    "Download the model from the official Gemma source before running the desktop harness.",
+    "The Android app keeps its smaller E2B GGUF path separate from this desktop demo profile."
+  ]
+}

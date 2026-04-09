@@ -9,11 +9,19 @@ import { glossaryTerms } from '@infrastructure/database/schema';
 export class DrizzleGlossaryTermRepository implements GlossaryTermRepository {
   constructor(private readonly db: AppDatabaseExecutor) {}
 
+  async findById(id: string) {
+    const rows = await this.db.select().from(glossaryTerms).where(eq(glossaryTerms.id, id)).limit(1);
+    const row = rows[0];
+
+    return row ? mapGlossaryTermRecord(row) : null;
+  }
+
   async listBySession(sessionId: string) {
-    const rows = await this.db.query.glossaryTerms.findMany({
-      where: eq(glossaryTerms.sessionId, sessionId),
-      orderBy: [asc(glossaryTerms.orderIndex), asc(glossaryTerms.term), asc(glossaryTerms.id)],
-    });
+    const rows = await this.db
+      .select()
+      .from(glossaryTerms)
+      .where(eq(glossaryTerms.sessionId, sessionId))
+      .orderBy(asc(glossaryTerms.orderIndex), asc(glossaryTerms.term), asc(glossaryTerms.id));
 
     return rows.map(mapGlossaryTermRecord);
   }
@@ -23,6 +31,6 @@ export class DrizzleGlossaryTermRepository implements GlossaryTermRepository {
       return;
     }
 
-    await this.db.insert(glossaryTerms).values(terms.map(toGlossaryTermInsert));
+    await this.db.insert(glossaryTerms).values(terms.map(toGlossaryTermInsert)).run();
   }
 }

@@ -17,17 +17,17 @@ export class DrizzleTransactionRunner implements TransactionRunner {
     return this.db.transaction((tx) => {
       const transaction: QuestionAnswerWriteTransaction = {
         saveQuestion: (question) => {
-          tx.insert(questions).values(toQuestionInsert(question));
+          tx.insert(questions).values(toQuestionInsert(question)).run();
         },
         saveAnswer: (answer) => {
-          tx.insert(answers).values(toAnswerInsert(answer));
+          tx.insert(answers).values(toAnswerInsert(answer)).run();
         },
         saveAnswerSources: (sources) => {
           if (!sources.length) {
             return;
           }
 
-          tx.insert(answerSources).values(sources.map(toAnswerSourceInsert));
+          tx.insert(answerSources).values(sources.map(toAnswerSourceInsert)).run();
         },
       };
 

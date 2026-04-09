@@ -1,6 +1,7 @@
 import { StyleSheet, TextInput, View } from 'react-native';
 
 import { PrimaryButton } from '@presentation/components/PrimaryButton';
+import { themeColors } from '@presentation/theme/tokens';
 
 interface QuestionComposerProps {
   value: string;
@@ -22,7 +23,8 @@ export const QuestionComposer = ({
       multiline
       numberOfLines={4}
       onChangeText={onChangeText}
-      placeholder="Ask a grounded question about this lecture pack"
+      placeholder="Ask about the active lecture using only its uploaded evidence"
+      placeholderTextColor={themeColors.textSubtle}
       style={styles.input}
       value={value}
     />
@@ -41,12 +43,12 @@ const styles = StyleSheet.create({
   input: {
     minHeight: 112,
     borderWidth: 1,
-    borderColor: '#cbd5e1',
-    borderRadius: 14,
+    borderColor: themeColors.borderStrong,
+    borderRadius: 16,
     padding: 14,
-    backgroundColor: '#ffffff',
+    backgroundColor: themeColors.surface,
     textAlignVertical: 'top',
     fontSize: 15,
-    color: '#0f172a',
+    color: themeColors.text,
   },
 });

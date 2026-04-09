@@ -10,9 +10,12 @@ export class DrizzleAnswerRepository implements AnswerRepository {
   constructor(private readonly db: AppDatabaseExecutor) {}
 
   async findByQuestionId(questionId: string) {
-    const row = await this.db.query.answers.findFirst({
-      where: eq(answers.questionId, questionId),
-    });
+    const rows = await this.db
+      .select()
+      .from(answers)
+      .where(eq(answers.questionId, questionId))
+      .limit(1);
+    const row = rows[0];
 
     return row ? mapAnswerRecord(row) : null;
   }
@@ -22,14 +25,15 @@ export class DrizzleAnswerRepository implements AnswerRepository {
       return [];
     }
 
-    const rows = await this.db.query.answers.findMany({
-      where: inArray(answers.questionId, questionIds),
-      orderBy: [asc(answers.createdAt), asc(answers.id)],
-    });
+    const rows = await this.db
+      .select()
+      .from(answers)
+      .where(inArray(answers.questionId, questionIds))
+      .orderBy(asc(answers.createdAt), asc(answers.id));
     return rows.map(mapAnswerRecord);
   }
 
   async save(answer: Answer) {
-    await this.db.insert(answers).values(toAnswerInsert(answer));
+    await this.db.insert(answers).values(toAnswerInsert(answer)).run();
   }
 }

@@ -7,3 +7,7 @@ web-build
 android
 ios
 drizzle
+.expo-run*.log
+models/**
+.tmp/**
+.venv-gemma-wsl/**

@@ -11,6 +11,8 @@ import type {
   GroundedAnswerDraft,
   QuestionAnsweringService,
 } from '@domain/service-contracts/QuestionAnsweringService';
+import { GemmaRuntimeError } from '@domain/service-contracts/GemmaRuntimeError';
+import type { GemmaRuntimeStatus } from '@domain/service-contracts/GemmaRuntimeStatus';
 import type { RetrievalResult, RetrievalService } from '@domain/service-contracts/RetrievalService';
 import type { SupportCheckService } from '@domain/service-contracts/SupportCheckService';
 import type { QACategoryRepository } from '@domain/repository-contracts/QACategoryRepository';
@@ -84,6 +86,17 @@ const supportedRetrieval: RetrievalResult = {
   ],
 };
 
+const runtimeUnavailableStatus: GemmaRuntimeStatus = {
+  code: 'artifact_missing',
+  modelId: 'google/gemma-4-E2B-it',
+  executionMode: 'local-runtime',
+  sourcePresent: true,
+  artifactPresent: false,
+  bundledAssetPresent: false,
+  deviceModelPresent: false,
+  message: 'artifact missing',
+};
+
 const createUseCase = ({
   retrievalResult = supportedRetrieval,
   supportCheckService,
@@ -144,6 +157,12 @@ describe('AskLectureQuestionUseCase', () => {
     expect(transactionRunner.sources).toHaveLength(1);
     expect(transactionRunner.questions[0]?.status).toBe('supported');
     expect(transactionRunner.answers[0]?.state).toBe('grounded');
+    expect(questionAnsweringService.answerQuestion).toHaveBeenCalledWith(
+      'session_demo',
+      'What does RAG mean here?',
+      supportedRetrieval,
+      category,
+    );
   });
 
   it('persists unsupported questions with an unsupported answer and zero sources', async () => {
@@ -235,5 +254,31 @@ describe('AskLectureQuestionUseCase', () => {
     expect(result.question.status).toBe('unsupported');
     expect(result.answer.state).toBe('unsupported');
     expect(transactionRunner.questions[0]?.status).toBe('unsupported');
+  });
+
+  it('does not persist a fake answer when the Gemma runtime is unavailable', async () => {
+    const transactionRunner = new FakeTransactionRunner();
+    const supportCheckService: SupportCheckService = {
+      checkSupport: vi.fn().mockResolvedValue({
+        isSupported: true,
+        reason: 'Grounded lecture evidence is available locally.',
+      }),
+    };
+    const questionAnsweringService: QuestionAnsweringService = {
+      answerQuestion: vi.fn().mockRejectedValue(new GemmaRuntimeError(runtimeUnavailableStatus)),
+    };
+    const useCase = createUseCase({
+      supportCheckService,
+      questionAnsweringService,
+      transactionRunner,
+    });
+
+    await expect(useCase.execute('session_demo', 'What does RAG mean here?')).rejects.toThrow(
+      'artifact missing',
+    );
+
+    expect(transactionRunner.questions).toEqual([]);
+    expect(transactionRunner.answers).toEqual([]);
+    expect(transactionRunner.sources).toEqual([]);
   });
 });

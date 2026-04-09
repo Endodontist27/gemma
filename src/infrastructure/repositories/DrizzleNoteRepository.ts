@@ -10,15 +10,35 @@ export class DrizzleNoteRepository implements NoteRepository {
   constructor(private readonly db: AppDatabaseExecutor) {}
 
   async listBySession(sessionId: string) {
-    const rows = await this.db.query.notes.findMany({
-      where: eq(notes.sessionId, sessionId),
-      orderBy: [desc(notes.pinned), desc(notes.updatedAt), desc(notes.createdAt), desc(notes.id)],
-    });
+    const rows = await this.db
+      .select()
+      .from(notes)
+      .where(eq(notes.sessionId, sessionId))
+      .orderBy(desc(notes.pinned), desc(notes.updatedAt), desc(notes.createdAt), desc(notes.id));
 
     return rows.map(mapNoteRecord);
   }
 
   async save(note: Note) {
-    await this.db.insert(notes).values(toNoteInsert(note));
+    await this.db
+      .insert(notes)
+      .values(toNoteInsert(note))
+      .onConflictDoUpdate({
+        target: notes.id,
+        set: {
+          sessionId: note.sessionId,
+          content: note.content,
+          anchorType: note.anchorType,
+          anchorId: note.anchorId,
+          pinned: note.pinned,
+          createdAt: note.createdAt,
+          updatedAt: note.updatedAt,
+        },
+      })
+      .run();
+  }
+
+  async delete(id: string) {
+    await this.db.delete(notes).where(eq(notes.id, id)).run();
   }
 }

@@ -1,15 +1,12 @@
-import { migrate } from 'drizzle-orm/expo-sqlite/migrator';
+import type { SQLiteDatabase } from 'expo-sqlite';
 
 import type { DatabaseInitializer } from '@application/ports/DatabaseInitializer';
-import type { AppDatabase } from '@infrastructure/database/client';
-import { appMigrations } from '@infrastructure/database/migrations/appMigrations';
-
-type ExpoMigrationConfig = Parameters<typeof migrate>[1];
+import { runAppMigrations } from '@infrastructure/database/migrations/runAppMigrations';
 
 export class DrizzleDatabaseInitializer implements DatabaseInitializer {
-  constructor(private readonly db: AppDatabase) {}
+  constructor(private readonly sqlite: SQLiteDatabase) {}
 
   async initialize() {
-    await migrate(this.db, appMigrations as unknown as ExpoMigrationConfig);
+    runAppMigrations(this.sqlite);
   }
 }

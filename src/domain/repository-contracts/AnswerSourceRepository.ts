@@ -1,6 +1,7 @@
 import type { AnswerSource } from '@domain/entities/AnswerSource';
 
 export interface AnswerSourceRepository {
+  findById(answerSourceId: string): Promise<AnswerSource | null>;
   /** Ordered by source priority, then relevance descending, then stable id order. */
   listByAnswerId(answerId: string): Promise<AnswerSource[]>;
   /** Ordered by answer id, then source priority, then relevance descending. */

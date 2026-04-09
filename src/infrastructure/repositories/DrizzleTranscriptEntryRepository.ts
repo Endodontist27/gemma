@@ -12,15 +12,27 @@ import { transcriptEntries } from '@infrastructure/database/schema';
 export class DrizzleTranscriptEntryRepository implements TranscriptEntryRepository {
   constructor(private readonly db: AppDatabaseExecutor) {}
 
+  async findById(id: string) {
+    const rows = await this.db
+      .select()
+      .from(transcriptEntries)
+      .where(eq(transcriptEntries.id, id))
+      .limit(1);
+    const row = rows[0];
+
+    return row ? mapTranscriptEntryRecord(row) : null;
+  }
+
   async listBySession(sessionId: string) {
-    const rows = await this.db.query.transcriptEntries.findMany({
-      where: eq(transcriptEntries.sessionId, sessionId),
-      orderBy: [
+    const rows = await this.db
+      .select()
+      .from(transcriptEntries)
+      .where(eq(transcriptEntries.sessionId, sessionId))
+      .orderBy(
         asc(transcriptEntries.orderIndex),
         asc(transcriptEntries.startedAtSeconds),
         asc(transcriptEntries.id),
-      ],
-    });
+      );
 
     return rows.map(mapTranscriptEntryRecord);
   }
@@ -30,6 +42,6 @@ export class DrizzleTranscriptEntryRepository implements TranscriptEntryReposito
       return;
     }
 
-    await this.db.insert(transcriptEntries).values(entries.map(toTranscriptEntryInsert));
+    await this.db.insert(transcriptEntries).values(entries.map(toTranscriptEntryInsert)).run();
   }
 }

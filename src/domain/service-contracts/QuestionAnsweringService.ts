@@ -11,6 +11,7 @@ export interface GroundedAnswerDraft {
 
 export interface QuestionAnsweringService {
   answerQuestion(
+    sessionId: string,
     questionText: string,
     retrieval: RetrievalResult,
     category: QACategory | null,

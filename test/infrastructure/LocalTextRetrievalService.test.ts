@@ -22,6 +22,7 @@ describe('LocalTextRetrievalService', () => {
             updatedAt: '2026-04-03T09:00:00.000Z',
           },
         ],
+        findById: async () => null,
         saveMany: async () => undefined,
       },
       {
@@ -38,6 +39,7 @@ describe('LocalTextRetrievalService', () => {
           },
         ],
         listByMaterial: async () => [],
+        findById: async () => null,
         saveMany: async () => undefined,
       },
       {
@@ -52,6 +54,7 @@ describe('LocalTextRetrievalService', () => {
             createdAt: '2026-04-03T09:00:00.000Z',
           },
         ],
+        findById: async () => null,
         saveMany: async () => undefined,
       },
     );
@@ -65,6 +68,7 @@ describe('LocalTextRetrievalService', () => {
     const retrievalService = new LocalTextRetrievalService(
       {
         listBySession: async () => [],
+        findById: async () => null,
         saveMany: async () => undefined,
       },
       {
@@ -81,6 +85,7 @@ describe('LocalTextRetrievalService', () => {
           },
         ],
         listByMaterial: async () => [],
+        findById: async () => null,
         saveMany: async () => undefined,
       },
       {
@@ -95,6 +100,7 @@ describe('LocalTextRetrievalService', () => {
             createdAt: '2026-04-03T09:00:00.000Z',
           },
         ],
+        findById: async () => null,
         saveMany: async () => undefined,
       },
     );
@@ -122,5 +128,86 @@ describe('LocalTextRetrievalService', () => {
     });
 
     expect(result.isSupported).toBe(false);
+  });
+
+  it('treats several moderately strong grounded matches as supported', async () => {
+    const supportCheckService = new LocalSupportCheckService();
+    const result = await supportCheckService.checkSupport(
+      'How is working length confirmed?',
+      {
+        matches: [
+          {
+            sourceType: 'glossary_term',
+            sourceRecordId: 'glossary_working_length',
+            label: 'Glossary: Working length',
+            excerpt: 'Working length is the apical extent used during instrumentation and obturation.',
+            score: 0.96,
+          },
+          {
+            sourceType: 'material_chunk',
+            sourceRecordId: 'chunk_apex_locator',
+            label: 'Material: Apex locator confirmation',
+            excerpt: 'Electronic apex locator findings are combined with radiographs to confirm working length.',
+            score: 0.95,
+          },
+          {
+            sourceType: 'transcript_entry',
+            sourceRecordId: 'transcript_review',
+            label: 'Transcript: Review',
+            excerpt: 'We confirm working length by correlating file position, apex locator readings, and radiographs.',
+            score: 0.82,
+          },
+        ],
+      },
+    );
+
+    expect(result.isSupported).toBe(true);
+  });
+
+  it('filters out weak partial-token matches for definition-style questions', async () => {
+    const retrievalService = new LocalTextRetrievalService(
+      {
+        listBySession: async () => [
+          {
+            id: 'glossary_bad_access',
+            sessionId,
+            term: 'Secondary endodontic infection',
+            aliases: ['microbial contamination'],
+            definition: 'structure and seal the access.',
+            orderIndex: 0,
+            createdAt: '2026-04-03T09:00:00.000Z',
+            updatedAt: '2026-04-03T09:00:00.000Z',
+          },
+        ],
+        findById: async () => null,
+        saveMany: async () => undefined,
+      },
+      {
+        listBySession: async () => [
+          {
+            id: 'chunk_bad_access',
+            sessionId,
+            materialId: 'material_1',
+            heading: 'Complications',
+            text: 'A leaking restoration can compromise the seal and structure around the access.',
+            keywords: ['restoration', 'access'],
+            orderIndex: 0,
+            createdAt: '2026-04-03T09:00:00.000Z',
+          },
+        ],
+        listByMaterial: async () => [],
+        findById: async () => null,
+        saveMany: async () => undefined,
+      },
+      {
+        listBySession: async () => [],
+        findById: async () => null,
+        saveMany: async () => undefined,
+      },
+    );
+
+    const result = await retrievalService.retrieve(sessionId, 'What is access cavity?');
+
+    expect(result.matches).toHaveLength(0);
   });
 });

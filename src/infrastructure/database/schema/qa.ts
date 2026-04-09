@@ -95,7 +95,7 @@ export const answerSources = sqliteTable(
     index('answer_sources_session_idx').on(table.sessionId),
     check(
       'answer_sources_type_check',
-      sql`${table.sourceType} in ('glossary_term', 'material_chunk', 'transcript_entry')`,
+      sql`${table.sourceType} in ('glossary_term', 'material_chunk', 'transcript_entry', 'evidence_unit')`,
     ),
   ],
 );

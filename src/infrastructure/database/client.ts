@@ -1,6 +1,5 @@
-import { Platform } from 'react-native';
 import { drizzle } from 'drizzle-orm/expo-sqlite';
-import type { SQLiteDatabase } from 'expo-sqlite';
+import { openDatabaseSync, type SQLiteDatabase } from 'expo-sqlite';
 
 import * as schema from '@infrastructure/database/schema';
 import { appConfig } from '@shared/config/appConfig';
@@ -16,20 +15,7 @@ export interface DatabaseClient {
   drizzle: AppDatabase;
 }
 
-const loadExpoSqlite = () => {
-  if (Platform.OS === 'web') {
-    throw new Error(
-      'Lecture Companion supports iOS and Android only. The Expo SQLite runtime is intentionally disabled on web.',
-    );
-  }
-
-  const runtimeRequire = Function('return require')() as NodeRequire;
-  const moduleName = ['expo', 'sqlite'].join('-');
-  return runtimeRequire(moduleName) as typeof import('expo-sqlite');
-};
-
 export const createDatabaseClient = (): DatabaseClient => {
-  const { openDatabaseSync } = loadExpoSqlite();
   const sqlite = openDatabaseSync(appConfig.database.fileName);
   sqlite.execSync('PRAGMA foreign_keys = ON;');
 

@@ -15,25 +15,33 @@ export class DrizzleLectureSessionRepository implements LectureSessionRepository
   }
 
   async list() {
-    const rows = await this.db.query.lectureSessions.findMany({
-      orderBy: [
-        desc(lectureSessions.startsAt),
-        asc(lectureSessions.title),
-        asc(lectureSessions.id),
-      ],
-    });
+    const rows = await this.db
+      .select()
+      .from(lectureSessions)
+      .orderBy(desc(lectureSessions.startsAt), asc(lectureSessions.title), asc(lectureSessions.id));
     return rows.map(mapLectureSessionRecord);
   }
 
   async findById(id: string) {
-    const row = await this.db.query.lectureSessions.findFirst({
-      where: eq(lectureSessions.id, id),
-    });
+    const rows = await this.db
+      .select()
+      .from(lectureSessions)
+      .where(eq(lectureSessions.id, id))
+      .limit(1);
+    const row = rows[0];
 
     return row ? mapLectureSessionRecord(row) : null;
   }
 
+  async deleteById(id: string) {
+    await this.db.delete(lectureSessions).where(eq(lectureSessions.id, id)).run();
+  }
+
+  async clearAll() {
+    await this.db.delete(lectureSessions).run();
+  }
+
   async save(session: LectureSession) {
-    await this.db.insert(lectureSessions).values(toLectureSessionInsert(session));
+    await this.db.insert(lectureSessions).values(toLectureSessionInsert(session)).run();
   }
 }

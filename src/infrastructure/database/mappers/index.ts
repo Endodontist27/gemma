@@ -30,3 +30,11 @@ export {
   toBookmarkInsert,
   toNoteInsert,
 } from '@infrastructure/database/mappers/notes';
+export {
+  mapAssetDigestRecord,
+  mapEvidenceUnitRecord,
+  mapUploadedAssetRecord,
+  toAssetDigestInsert,
+  toEvidenceUnitInsert,
+  toUploadedAssetInsert,
+} from '@infrastructure/database/mappers/multimodal';

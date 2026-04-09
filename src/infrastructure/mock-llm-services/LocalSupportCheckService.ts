@@ -6,14 +6,14 @@ import type {
 } from '@domain/service-contracts/SupportCheckService';
 
 export class LocalSupportCheckService implements SupportCheckService {
-  async checkSupport(_questionText: string, retrieval: RetrievalResult): Promise<SupportDecision> {
-    const isSupported = hasGroundedSupport(retrieval);
+  async checkSupport(questionText: string, retrieval: RetrievalResult): Promise<SupportDecision> {
+    const isSupported = hasGroundedSupport(questionText, retrieval);
 
     return {
       isSupported,
       reason: isSupported
         ? 'Grounded lecture evidence is available locally.'
-        : 'No local lecture evidence met the support threshold.',
+        : 'The uploaded lecture evidence does not yet support a reliable grounded answer.',
     };
   }
 }

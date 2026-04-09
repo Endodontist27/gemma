@@ -1,10 +1,15 @@
 import type { PropsWithChildren } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { themeColors } from '@presentation/theme/tokens';
 
 export const Screen = ({ children }: PropsWithChildren) => (
   <SafeAreaView edges={['top']} style={styles.safeArea}>
-    <ScrollView contentContainerStyle={styles.content} style={styles.scrollView}>
+    <ScrollView
+      contentContainerStyle={styles.content}
+      showsVerticalScrollIndicator={false}
+      style={styles.scrollView}
+    >
       <View style={styles.inner}>{children}</View>
     </ScrollView>
   </SafeAreaView>
@@ -13,16 +18,17 @@ export const Screen = ({ children }: PropsWithChildren) => (
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: '#f8fafc',
+    backgroundColor: themeColors.background,
   },
   scrollView: {
     flex: 1,
   },
   content: {
-    padding: 16,
+    paddingHorizontal: 18,
+    paddingTop: 12,
   },
   inner: {
-    gap: 16,
-    paddingBottom: 24,
+    gap: 18,
+    paddingBottom: 28,
   },
 });

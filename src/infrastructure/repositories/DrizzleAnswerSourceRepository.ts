@@ -10,16 +10,28 @@ import { answerSources } from '@infrastructure/database/schema';
 export class DrizzleAnswerSourceRepository implements AnswerSourceRepository {
   constructor(private readonly db: AppDatabaseExecutor) {}
 
+  async findById(answerSourceId: string) {
+    const rows = await this.db
+      .select()
+      .from(answerSources)
+      .where(eq(answerSources.id, answerSourceId))
+      .limit(1);
+    const row = rows[0];
+
+    return row ? mapAnswerSourceRecord(row) : null;
+  }
+
   async listByAnswerId(answerId: string) {
-    const rows = await this.db.query.answerSources.findMany({
-      where: eq(answerSources.answerId, answerId),
-      orderBy: [
+    const rows = await this.db
+      .select()
+      .from(answerSources)
+      .where(eq(answerSources.answerId, answerId))
+      .orderBy(
         answerSourcePriorityOrder,
         desc(answerSources.relevanceScore),
         asc(answerSources.createdAt),
         asc(answerSources.id),
-      ],
-    });
+      );
 
     return rows.map(mapAnswerSourceRecord);
   }
@@ -29,16 +41,17 @@ export class DrizzleAnswerSourceRepository implements AnswerSourceRepository {
       return [];
     }
 
-    const rows = await this.db.query.answerSources.findMany({
-      where: inArray(answerSources.answerId, answerIds),
-      orderBy: [
+    const rows = await this.db
+      .select()
+      .from(answerSources)
+      .where(inArray(answerSources.answerId, answerIds))
+      .orderBy(
         asc(answerSources.answerId),
         answerSourcePriorityOrder,
         desc(answerSources.relevanceScore),
         asc(answerSources.createdAt),
         asc(answerSources.id),
-      ],
-    });
+      );
     return rows.map(mapAnswerSourceRecord);
   }
 
@@ -47,6 +60,6 @@ export class DrizzleAnswerSourceRepository implements AnswerSourceRepository {
       return;
     }
 
-    await this.db.insert(answerSources).values(sources.map(toAnswerSourceInsert));
+    await this.db.insert(answerSources).values(sources.map(toAnswerSourceInsert)).run();
   }
 }

@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 
 import type { CommunityQuestionDto } from '@application/dto/CommunityQuestionDto';
-import { useAppContainer } from '@app/bootstrap/AppContainerContext';
 import { useAppStore } from '@presentation/hooks/useAppStore';
+import { useAppContainer } from '@/app-shell/bootstrap/AppContainerContext';
 
 export const useCommunityViewModel = () => {
   const container = useAppContainer();
@@ -13,10 +13,22 @@ export const useCommunityViewModel = () => {
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [items, setItems] = useState<CommunityQuestionDto[]>([]);
+  const [itemsSessionId, setItemsSessionId] = useState<string | null>(null);
+  const [reloadVersion, setReloadVersion] = useState(0);
+
+  useEffect(() => {
+    setItems([]);
+    setItemsSessionId(null);
+    setError(null);
+    setIsLoading(false);
+  }, [activeSessionId]);
 
   useEffect(() => {
     if (!activeSessionId) {
       setItems([]);
+      setItemsSessionId(null);
+      setError(null);
+      setIsLoading(false);
       return;
     }
 
@@ -30,6 +42,7 @@ export const useCommunityViewModel = () => {
 
         if (!cancelled) {
           setItems(response);
+          setItemsSessionId(activeSessionId);
         }
       } catch (loadError) {
         if (!cancelled) {
@@ -49,12 +62,15 @@ export const useCommunityViewModel = () => {
     return () => {
       cancelled = true;
     };
-  }, [activeSessionId, contentVersion, lectureExperienceOrchestrator]);
+  }, [activeSessionId, contentVersion, lectureExperienceOrchestrator, reloadVersion]);
 
   return {
     activeSessionId,
     error,
     isLoading,
-    items,
+    items: itemsSessionId === activeSessionId ? items : [],
+    reloadCommunityFeed: () => {
+      setReloadVersion((value) => value + 1);
+    },
   };
 };

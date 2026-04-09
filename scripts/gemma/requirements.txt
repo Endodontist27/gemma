@@ -1,0 +1,6 @@
+huggingface_hub>=1.9.0
+transformers>=4.57.0
+torch>=2.4.0
+accelerate>=1.10.0
+jinja2>=3.1.0
+bitsandbytes>=0.48.0

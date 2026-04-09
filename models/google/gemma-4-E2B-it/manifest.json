@@ -1,0 +1,41 @@
+{
+  "modelId": "google/gemma-4-E2B-it",
+  "source": {
+    "relativePath": "models/google/gemma-4-E2B-it/source",
+    "present": true,
+    "snapshotSha256": "73a726b6974424a92c11def0ee1e72a67b0b1632d61dce123e2d28e3e42533fd",
+    "files": [
+      ".gitattributes",
+      "README.md",
+      "chat_template.jinja",
+      "config.json",
+      "generation_config.json",
+      "model.safetensors",
+      "processor_config.json",
+      "tokenizer.json",
+      "tokenizer_config.json"
+    ],
+    "downloadedAt": "2026-04-04T13:13:36.778334+00:00"
+  },
+  "android": {
+    "artifactRelativePath": "models/google/gemma-4-E2B-it/android/gemma-4-E2B-it-Q3_K_S.gguf",
+    "artifactRepoId": "unsloth/gemma-4-E2B-it-GGUF",
+    "artifactRepoFilename": "gemma-4-E2B-it-Q3_K_S.gguf",
+    "present": true,
+    "artifactSha256": "320a7a0712c9350957fd91ba1cd5d52d03cd982ef1d7da267a4825430d1c7791",
+    "deviceModelPath": "lecture-companion/gemma-4-E2B-it-Q3_K_S.gguf",
+    "conversionProfile": {
+      "backend": "llama-cpp-rn-cpu",
+      "artifactFormat": "gguf",
+      "quantization": "q3_k_s",
+      "prefillSeqLen": 256,
+      "kvCacheMaxLen": 256
+    },
+    "toolVersions": {
+      "huggingfaceHub": "1.9.0",
+      "llamaRn": "0.11.5",
+      "llamaCpp": null
+    },
+    "preparedAt": "2026-04-04T13:13:39.252518+00:00"
+  }
+}

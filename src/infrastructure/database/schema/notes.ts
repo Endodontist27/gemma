@@ -21,7 +21,7 @@ export const notes = sqliteTable(
     index('notes_session_idx').on(table.sessionId, table.updatedAt),
     check(
       'notes_anchor_type_check',
-      sql`${table.anchorType} in ('session', 'lecture_material', 'material_chunk', 'transcript_entry')`,
+      sql`${table.anchorType} in ('session', 'lecture_material', 'material_chunk', 'glossary_term', 'transcript_entry', 'evidence_unit')`,
     ),
   ],
 );
@@ -47,7 +47,7 @@ export const bookmarks = sqliteTable(
     index('bookmarks_session_idx').on(table.sessionId),
     check(
       'bookmarks_target_type_check',
-      sql`${table.targetType} in ('lecture_material', 'material_chunk', 'glossary_term', 'transcript_entry')`,
+      sql`${table.targetType} in ('lecture_material', 'material_chunk', 'glossary_term', 'transcript_entry', 'evidence_unit')`,
     ),
   ],
 );

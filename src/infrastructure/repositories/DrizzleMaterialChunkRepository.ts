@@ -9,6 +9,13 @@ import { lectureMaterials, materialChunks } from '@infrastructure/database/schem
 export class DrizzleMaterialChunkRepository implements MaterialChunkRepository {
   constructor(private readonly db: AppDatabaseExecutor) {}
 
+  async findById(id: string) {
+    const rows = await this.db.select().from(materialChunks).where(eq(materialChunks.id, id)).limit(1);
+    const row = rows[0];
+
+    return row ? mapMaterialChunkRecord(row) : null;
+  }
+
   async listBySession(sessionId: string) {
     const rows = await this.db
       .select({ chunk: materialChunks })
@@ -25,10 +32,11 @@ export class DrizzleMaterialChunkRepository implements MaterialChunkRepository {
   }
 
   async listByMaterial(materialId: string) {
-    const rows = await this.db.query.materialChunks.findMany({
-      where: eq(materialChunks.materialId, materialId),
-      orderBy: [asc(materialChunks.orderIndex), asc(materialChunks.id)],
-    });
+    const rows = await this.db
+      .select()
+      .from(materialChunks)
+      .where(eq(materialChunks.materialId, materialId))
+      .orderBy(asc(materialChunks.orderIndex), asc(materialChunks.id));
 
     return rows.map(mapMaterialChunkRecord);
   }
@@ -38,6 +46,6 @@ export class DrizzleMaterialChunkRepository implements MaterialChunkRepository {
       return;
     }
 
-    await this.db.insert(materialChunks).values(chunks.map(toMaterialChunkInsert));
+    await this.db.insert(materialChunks).values(chunks.map(toMaterialChunkInsert)).run();
   }
 }

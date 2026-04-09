@@ -1,13 +1,21 @@
 import type { PropsWithChildren } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import { cardShadow, themeColors } from '@presentation/theme/tokens';
 
 interface SectionCardProps extends PropsWithChildren {
   title?: string;
   subtitle?: string;
+  tone?: 'default' | 'accent' | 'subtle';
 }
 
-export const SectionCard = ({ children, title, subtitle }: SectionCardProps) => (
-  <View style={styles.card}>
+export const SectionCard = ({ children, title, subtitle, tone = 'default' }: SectionCardProps) => (
+  <View
+    style={[
+      styles.card,
+      tone === 'accent' ? styles.cardAccent : null,
+      tone === 'subtle' ? styles.cardSubtle : null,
+    ]}
+  >
     {title ? <Text style={styles.title}>{title}</Text> : null}
     {subtitle ? <Text style={styles.subtitle}>{subtitle}</Text> : null}
     <View style={styles.body}>{children}</View>
@@ -17,20 +25,29 @@ export const SectionCard = ({ children, title, subtitle }: SectionCardProps) => 
 const styles = StyleSheet.create({
   card: {
     borderWidth: 1,
-    borderColor: '#dbe4f0',
-    borderRadius: 16,
-    padding: 16,
-    backgroundColor: '#ffffff',
-    gap: 8,
+    borderColor: themeColors.border,
+    borderRadius: 20,
+    padding: 18,
+    backgroundColor: themeColors.surface,
+    gap: 10,
+    ...cardShadow,
+  },
+  cardAccent: {
+    backgroundColor: themeColors.surfaceAccent,
+    borderColor: '#c7dcff',
+  },
+  cardSubtle: {
+    backgroundColor: themeColors.surfaceMuted,
   },
   title: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#0f172a',
+    color: themeColors.text,
   },
   subtitle: {
     fontSize: 14,
-    color: '#475569',
+    color: themeColors.textMuted,
+    lineHeight: 20,
   },
   body: {
     gap: 12,
