@@ -2,6 +2,7 @@ import { isGemmaRuntimeError } from '@domain/service-contracts/GemmaRuntimeError
 import type { GemmaAdapter } from '@domain/service-contracts/GemmaAdapter';
 import type { DatabaseInitializer } from '@application/ports/DatabaseInitializer';
 import type { SelectedSessionStore } from '@application/ports/SelectedSessionStore';
+import type { EnsureSingleSessionWorkspaceUseCase } from '@application/use-cases/EnsureSingleSessionWorkspaceUseCase';
 import type { ListLectureSessionsUseCase } from '@application/use-cases/ListLectureSessionsUseCase';
 import type { SummaryRepository } from '@domain/repository-contracts/SummaryRepository';
 import type { LectureSessionRepository } from '@domain/repository-contracts/LectureSessionRepository';
@@ -21,6 +22,7 @@ export class AppBootstrapOrchestrator {
     private readonly summaryRepository: SummaryRepository,
     private readonly summarizationService: SummarizationService,
     private readonly gemmaAdapter: GemmaAdapter,
+    private readonly ensureSingleSessionWorkspaceUseCase: EnsureSingleSessionWorkspaceUseCase,
     private readonly listLectureSessionsUseCase: ListLectureSessionsUseCase,
     private readonly selectedSessionStore: SelectedSessionStore,
   ) {}
@@ -36,6 +38,13 @@ export class AppBootstrapOrchestrator {
     report('Initializing local database...');
     await this.databaseInitializer.initialize();
     report('Local database ready.');
+
+    const persistedSessionId = await this.selectedSessionStore.getSelectedSessionId();
+    logDev('bootstrap', 'Persisted session id', persistedSessionId);
+
+    report('Preparing lecture workspace...');
+    await this.ensureSingleSessionWorkspaceUseCase.execute(persistedSessionId);
+    report('Lecture workspace synchronized.');
 
     report('Checking local Gemma runtime...');
     const gemmaStatus = await this.gemmaAdapter.getStatus();
@@ -84,8 +93,6 @@ export class AppBootstrapOrchestrator {
     }
 
     report('Restoring your session workspace...');
-    const persistedSessionId = await this.selectedSessionStore.getSelectedSessionId();
-    logDev('bootstrap', 'Persisted session id', persistedSessionId);
     const activeSessionId =
       sessions.find((session) => session.id === persistedSessionId)?.id ?? sessions[0]?.id ?? null;
 

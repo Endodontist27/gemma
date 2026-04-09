@@ -63,6 +63,7 @@ export class DesktopBridgeGemmaAdapter implements GemmaAdapter {
         ...init,
         headers: {
           'Content-Type': 'application/json',
+          Connection: 'close',
           ...(init?.headers ?? {}),
         },
         signal: timeout.signal,

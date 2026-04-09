@@ -160,12 +160,13 @@ export class LocalTextRetrievalService implements RetrievalService {
       return baselineMatches;
     }
 
+    const rerankCandidates = evidenceUnitMatches.slice(0, 6);
     const reranked = await this.desktopMultimodalBridgeClient.rerank(
       questionText,
-      evidenceUnitMatches.map<DesktopBridgeRerankCandidate>(({ unit }) => ({
+      rerankCandidates.map<DesktopBridgeRerankCandidate>(({ unit }) => ({
         id: unit.id,
         title: unit.title,
-        excerpt: unit.contentText,
+        excerpt: toExcerpt(unit.contentText || unit.excerpt, 320),
       })),
     );
 

@@ -111,13 +111,14 @@ export class DesktopMultimodalBridgeClient {
       return [];
     }
 
-    const timeout = createTimeoutSignal(120_000);
+    const timeout = createTimeoutSignal(45_000);
 
     try {
       const response = await fetch(`${this.baseUrl}/rerank`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          Connection: 'close',
         },
         body: JSON.stringify({
           question,

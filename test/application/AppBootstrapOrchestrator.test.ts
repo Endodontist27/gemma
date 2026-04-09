@@ -21,6 +21,9 @@ describe('AppBootstrapOrchestrator', () => {
       getSelectedSessionId: vi.fn().mockResolvedValue(null),
       setSelectedSessionId: vi.fn().mockResolvedValue(undefined),
     };
+    const ensureSingleSessionWorkspaceUseCase = {
+      execute: vi.fn().mockResolvedValue(undefined),
+    };
     const session = {
       id: 'session_local',
       title: 'Grounded Retrieval',
@@ -61,6 +64,7 @@ describe('AppBootstrapOrchestrator', () => {
         provider: 'gemma',
         executionMode: 'local-runtime',
       } as any,
+      ensureSingleSessionWorkspaceUseCase as any,
       {
         execute: vi.fn().mockResolvedValue([session]),
       } as any,
@@ -70,6 +74,7 @@ describe('AppBootstrapOrchestrator', () => {
     const result = await orchestrator.execute();
 
     expect(result.activeSessionId).toBe('session_local');
+    expect(ensureSingleSessionWorkspaceUseCase.execute).toHaveBeenCalledWith(null);
     expect(selectedSessionStore.setSelectedSessionId).toHaveBeenCalledWith('session_local');
   });
 });

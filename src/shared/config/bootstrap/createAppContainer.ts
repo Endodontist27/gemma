@@ -18,7 +18,7 @@ export const createAppContainer = (): AppContainer => {
     transactionRunner: new DrizzleTransactionRunner(databaseClient.drizzle),
   };
   const services = createServices(databaseClient.drizzle, repositories);
-  const useCases = createUseCases(repositories, services, ports);
+  const useCases = createUseCases(databaseClient.drizzle, repositories, services, ports);
   const orchestrators = createOrchestrators(repositories, ports, services, useCases);
 
   return {

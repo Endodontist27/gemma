@@ -398,7 +398,10 @@ def rerank_candidates_with_gemma(
     if not candidates:
         return []
 
-    prompt_lines = [f"{index + 1}. [{candidate['id']}] {candidate['title']}: {candidate['excerpt']}" for index, candidate in enumerate(candidates[:12])]
+    prompt_lines = [
+        f"{index + 1}. [{candidate['id']}] {candidate['title']}: {str(candidate['excerpt'])[:320].strip()}"
+        for index, candidate in enumerate(candidates[:6])
+    ]
     response = runner.generate(
         system_prompt="You rerank grounded lecture evidence for question answering.",
         user_prompt=(
@@ -409,6 +412,11 @@ def rerank_candidates_with_gemma(
             + "\n".join(prompt_lines)
         ),
         mode="summary",
+        max_new_tokens=192,
+        temperature=0.0,
+        top_k=8,
+        top_p=0.9,
+        enable_thinking=False,
     )
     payload = _extract_json_object(response)
     results = payload.get("results", [])

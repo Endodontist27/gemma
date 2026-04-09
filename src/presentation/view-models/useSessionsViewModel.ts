@@ -1,13 +1,10 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system/legacy';
 import { Alert } from 'react-native';
 
+import type { SessionWorkspaceDto } from '@application/dto/SessionWorkspaceDto';
 import type { GemmaRuntimeStatus } from '@domain/service-contracts/GemmaRuntimeStatus';
-import { DrizzleGroundTruthSessionAppender } from '@infrastructure/ground-truth-import/GroundTruthSessionAppender';
-import { SingleSessionWorkspaceConsolidator } from '@infrastructure/ground-truth-import/SingleSessionWorkspaceConsolidator';
-import type { LectureMaterial } from '@domain/entities/LectureMaterial';
-import type { LectureSession } from '@domain/entities/LectureSession';
 import { useAppStore } from '@presentation/hooks/useAppStore';
 import { primaryModelId } from '@shared/config/modelConfig';
 import type { GroundTruthUploadAsset } from '@shared/types/GroundTruthUploadAsset';
@@ -20,36 +17,7 @@ const TEXT_BASED_UPLOAD_EXTENSIONS = new Set(['json', 'txt', 'md', 'markdown', '
 const getExtension = (name: string) =>
   name.includes('.') ? name.split('.').pop()?.toLowerCase() ?? '' : '';
 
-const collectSourceFiles = (materials: LectureMaterial[]) => {
-  const seen = new Set<string>();
-  const sourceFiles: string[] = [];
-
-  for (const material of materials) {
-    const label = material.sourceLabel.trim();
-    if (!label || seen.has(label)) {
-      continue;
-    }
-
-    seen.add(label);
-    sourceFiles.push(label);
-  }
-
-  return sourceFiles;
-};
-
-export interface SessionWorkspaceItem {
-  session: LectureSession;
-  sourceFiles: string[];
-  materialCount: number;
-  indexedAssets: {
-    id: string;
-    fileName: string;
-    status: 'pending' | 'processing' | 'ready' | 'failed';
-    sourceExtension: string;
-    errorMessage: string | null;
-    indexedAt: string | null;
-  }[];
-}
+export type SessionWorkspaceItem = SessionWorkspaceDto;
 
 export const useSessionsViewModel = () => {
   const container = useAppContainer();
@@ -57,35 +25,13 @@ export const useSessionsViewModel = () => {
   const clearLocalLectureDataUseCase = container.useCases.clearLocalLectureDataUseCase;
   const importLecturePackUseCase = container.useCases.importLecturePackUseCase;
   const importGroundTruthAssetsUseCase = container.useCases.importGroundTruthAssetsUseCase;
+  const listSessionWorkspacesUseCase = container.useCases.listSessionWorkspacesUseCase;
   const selectLectureSessionUseCase = container.useCases.selectLectureSessionUseCase;
-  const singleSessionWorkspaceConsolidator = useMemo(
-    () =>
-      new SingleSessionWorkspaceConsolidator({
-        lectureSessionRepository: container.repositories.lectureSessionRepository,
-        lectureMaterialRepository: container.repositories.lectureMaterialRepository,
-        materialChunkRepository: container.repositories.materialChunkRepository,
-        glossaryTermRepository: container.repositories.glossaryTermRepository,
-        transcriptEntryRepository: container.repositories.transcriptEntryRepository,
-        summaryRepository: container.repositories.summaryRepository,
-        qaCategoryRepository: container.repositories.qaCategoryRepository,
-        questionRepository: container.repositories.questionRepository,
-        answerRepository: container.repositories.answerRepository,
-        answerSourceRepository: container.repositories.answerSourceRepository,
-        uploadedAssetRepository: container.repositories.uploadedAssetRepository,
-        evidenceUnitRepository: container.repositories.evidenceUnitRepository,
-        assetDigestRepository: container.repositories.assetDigestRepository,
-        noteRepository: container.repositories.noteRepository,
-        bookmarkRepository: container.repositories.bookmarkRepository,
-        sessionAppender: new DrizzleGroundTruthSessionAppender(container.databaseClient.drizzle),
-      }),
-    [container.databaseClient.drizzle, container.repositories],
-  );
   const activeSessionId = useAppStore((state) => state.activeSessionId);
   const contentVersion = useAppStore((state) => state.contentVersion);
   const setActiveSessionId = useAppStore((state) => state.setActiveSessionId);
   const bumpContentVersion = useAppStore((state) => state.bumpContentVersion);
 
-  const [sessions, setSessions] = useState<LectureSession[]>([]);
   const [sessionWorkspaces, setSessionWorkspaces] = useState<SessionWorkspaceItem[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [isImporting, setIsImporting] = useState(false);
@@ -110,38 +56,12 @@ export const useSessionsViewModel = () => {
       try {
         setIsLoading(true);
         setError(null);
-        const loadedSessions = await singleSessionWorkspaceConsolidator.consolidate(
-          activeSessionId,
-        );
-        const workspaceItems = await Promise.all(
-          loadedSessions.map(async (session) => {
-            const materials = await container.repositories.lectureMaterialRepository.listBySession(
-              session.id,
-            );
-            const uploadedAssets =
-              await container.repositories.uploadedAssetRepository.listBySession(session.id);
-
-            return {
-              session,
-              sourceFiles: collectSourceFiles(materials),
-              materialCount: materials.length,
-              indexedAssets: uploadedAssets.map((asset) => ({
-                id: asset.id,
-                fileName: asset.fileName,
-                status: asset.status,
-                sourceExtension: asset.sourceExtension,
-                errorMessage: asset.errorMessage,
-                indexedAt: asset.indexedAt,
-              })),
-            } satisfies SessionWorkspaceItem;
-          }),
-        );
+        const workspaceItems = await listSessionWorkspacesUseCase.execute();
         if (!cancelled) {
-          setSessions(loadedSessions);
           setSessionWorkspaces(workspaceItems);
-          if (loadedSessions.length === 1 && activeSessionId !== loadedSessions[0]?.id) {
-            await selectLectureSessionUseCase.execute(loadedSessions[0]?.id ?? null);
-            setActiveSessionId(loadedSessions[0]?.id ?? null);
+          if (workspaceItems.length === 1 && activeSessionId !== workspaceItems[0]?.session.id) {
+            await selectLectureSessionUseCase.execute(workspaceItems[0]?.session.id ?? null);
+            setActiveSessionId(workspaceItems[0]?.session.id ?? null);
           }
         }
       } catch (loadError) {
@@ -162,13 +82,11 @@ export const useSessionsViewModel = () => {
     };
   }, [
     activeSessionId,
-    container.repositories.lectureMaterialRepository,
-    container.repositories.uploadedAssetRepository,
     contentVersion,
+    listSessionWorkspacesUseCase,
     reloadVersion,
     selectLectureSessionUseCase,
     setActiveSessionId,
-    singleSessionWorkspaceConsolidator,
   ]);
 
   useEffect(() => {
@@ -316,7 +234,8 @@ export const useSessionsViewModel = () => {
           : `ground-truth-upload-${result.assets.length}-files`,
         {
           mergeIntoSessionId:
-            activeSessionId ?? (sessions.length === 1 ? sessions[0]?.id ?? null : null),
+            activeSessionId ??
+            (sessionWorkspaces.length === 1 ? sessionWorkspaces[0]?.session.id ?? null : null),
         },
       );
 
@@ -394,7 +313,6 @@ export const useSessionsViewModel = () => {
                 setError(null);
                 setIsClearingData(true);
                 await clearLocalLectureDataUseCase.execute();
-                setSessions([]);
                 setSessionWorkspaces([]);
                 setActiveSessionId(null);
                 bumpContentVersion();
@@ -431,7 +349,6 @@ export const useSessionsViewModel = () => {
     reloadSessions,
     selectSession,
     selectingSessionId,
-    sessions,
     sessionWorkspaces,
   };
 };

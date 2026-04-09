@@ -20,6 +20,7 @@ export const createOrchestrators = (
     repositories.summaryRepository,
     services.summarizationService,
     services.gemmaAdapter,
+    useCases.ensureSingleSessionWorkspaceUseCase,
     useCases.listLectureSessionsUseCase,
     ports.selectedSessionStore,
   ),

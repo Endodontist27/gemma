@@ -7,6 +7,7 @@ import type { AskLectureQuestionUseCase } from '@application/use-cases/AskLectur
 import type { CreateNoteUseCase } from '@application/use-cases/CreateNoteUseCase';
 import type { ClearLocalLectureDataUseCase } from '@application/use-cases/ClearLocalLectureDataUseCase';
 import type { DeleteNoteUseCase } from '@application/use-cases/DeleteNoteUseCase';
+import type { EnsureSingleSessionWorkspaceUseCase } from '@application/use-cases/EnsureSingleSessionWorkspaceUseCase';
 import type { GetAnswerSourceDetailUseCase } from '@application/use-cases/GetAnswerSourceDetailUseCase';
 import type { GetSessionOverviewUseCase } from '@application/use-cases/GetSessionOverviewUseCase';
 import type { GetGemmaRuntimeStatusUseCase } from '@application/use-cases/GetGemmaRuntimeStatusUseCase';
@@ -14,6 +15,7 @@ import type { ImportGroundTruthAssetsUseCase } from '@application/use-cases/Impo
 import type { ImportLecturePackUseCase } from '@application/use-cases/ImportLecturePackUseCase';
 import type { ListCommunityFeedUseCase } from '@application/use-cases/ListCommunityFeedUseCase';
 import type { ListLectureSessionsUseCase } from '@application/use-cases/ListLectureSessionsUseCase';
+import type { ListSessionWorkspacesUseCase } from '@application/use-cases/ListSessionWorkspacesUseCase';
 import type { ListMaterialsUseCase } from '@application/use-cases/ListMaterialsUseCase';
 import type { ListNotesUseCase } from '@application/use-cases/ListNotesUseCase';
 import type { ListQuestionHistoryUseCase } from '@application/use-cases/ListQuestionHistoryUseCase';
@@ -84,6 +86,8 @@ export interface AppServices {
 
 export interface AppUseCases {
   listLectureSessionsUseCase: ListLectureSessionsUseCase;
+  ensureSingleSessionWorkspaceUseCase: EnsureSingleSessionWorkspaceUseCase;
+  listSessionWorkspacesUseCase: ListSessionWorkspacesUseCase;
   clearLocalLectureDataUseCase: ClearLocalLectureDataUseCase;
   importLecturePackUseCase: ImportLecturePackUseCase;
   importGroundTruthAssetsUseCase: ImportGroundTruthAssetsUseCase;

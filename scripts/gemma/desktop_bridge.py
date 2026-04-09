@@ -221,8 +221,10 @@ def make_handler(state: DesktopBridgeState):
             self.send_response(status)
             self.send_header("Content-Type", "application/json")
             self.send_header("Content-Length", str(len(body)))
+            self.send_header("Connection", "close")
             self.end_headers()
             self.wfile.write(body)
+            self.close_connection = True
 
         def _read_json(self) -> dict[str, Any]:
             content_length = int(self.headers.get("Content-Length", "0"))
