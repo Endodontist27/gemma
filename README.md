@@ -190,6 +190,8 @@ Notes:
 
 This repository is prepared for the Kaggle `Gemma 4 Good Hackathon` as a local-first app submission.
 
+For the full submission narrative, architecture framing, judging flow, and suggested track fit, see [COMPETITION_WRITEUP.md](./COMPETITION_WRITEUP.md).
+
 - The repo contains the full application code, local indexing pipeline, Android/emulator UI shell, and desktop Gemma bridge.
 - The repo does **not** redistribute Gemma weights.
 - Judges should download the official Gemma model from the public source and place it in the documented repo-local `models/` path.
