@@ -27,7 +27,7 @@ describe('ListSessionWorkspacesUseCase', () => {
         sessionId: session.id,
         title: 'Slides',
         type: 'slide_deck',
-        sourceLabel: 'THE RESTO.pptx',
+        sourceLabel: 'Restorative Concepts.pptx',
         contentText: 'Slide digest',
         orderIndex: 0,
         createdAt: '2026-04-09T09:00:00.000Z',
@@ -38,7 +38,7 @@ describe('ListSessionWorkspacesUseCase', () => {
         sessionId: session.id,
         title: 'Glossary',
         type: 'reading',
-        sourceLabel: 'restorative_dentistry_glossary_definitions.pdf',
+        sourceLabel: 'restorative_glossary.pdf',
         contentText: 'Glossary digest',
         orderIndex: 1,
         createdAt: '2026-04-09T09:00:00.000Z',
@@ -49,7 +49,7 @@ describe('ListSessionWorkspacesUseCase', () => {
       {
         id: 'asset_1',
         sessionId: session.id,
-        fileName: 'THE RESTO.pptx',
+        fileName: 'Restorative Concepts.pptx',
         mediaType: 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
         sourceKind: 'material',
         sourceExtension: 'pptx',
@@ -81,10 +81,10 @@ describe('ListSessionWorkspacesUseCase', () => {
     expect(workspaces[0]?.session.id).toBe(session.id);
     expect(workspaces[0]?.materialCount).toBe(2);
     expect(workspaces[0]?.sourceFiles).toEqual([
-      'THE RESTO.pptx',
-      'restorative_dentistry_glossary_definitions.pdf',
+      'Restorative Concepts.pptx',
+      'restorative_glossary.pdf',
     ]);
-    expect(workspaces[0]?.indexedAssets[0]?.fileName).toBe('THE RESTO.pptx');
+    expect(workspaces[0]?.indexedAssets[0]?.fileName).toBe('Restorative Concepts.pptx');
     expect(workspaces[0]?.indexedAssets[0]?.status).toBe('ready');
   });
 });

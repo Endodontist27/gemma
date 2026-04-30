@@ -27,7 +27,7 @@ Use this checklist for the final Gemma 4 Good Hackathon submission.
 - Main Track
 - Future of Education
 - Safety & Trust
-- Cactus Prize, if Kaggle allows selecting it for a local-first mobile-oriented app
+- Cactus Prize only if the submission form invites a special-track selection and the description is framed carefully as a mobile workflow that routes heavyweight Gemma reasoning to a local desktop runtime. Do not lead with this over the education and trust tracks.
 
 ## Demo Video Checklist
 

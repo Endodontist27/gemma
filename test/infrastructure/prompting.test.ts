@@ -65,7 +65,7 @@ describe('createGemmaPrompt', () => {
       visualEvidence: [
         {
           uri: 'data:image/jpeg;base64,abc',
-          caption: 'THE RESTO.pptx | Slide 8. Restoration diagram showing deep margin elevation.',
+          caption: 'Restorative Concepts.pptx | Slide 8. Restoration diagram showing deep margin elevation.',
         },
       ],
     });

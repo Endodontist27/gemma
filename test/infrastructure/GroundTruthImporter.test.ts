@@ -481,12 +481,12 @@ describe('GroundTruthImporter', () => {
     await importer.importFromAssets(
       [
         {
-          name: 'restorative_dentistry_glossary_definitions.pdf',
+          name: 'restorative_glossary.pdf',
           mimeType: 'application/pdf',
-          sourceUri: 'file:///restorative_dentistry_glossary_definitions.pdf',
+          sourceUri: 'file:///restorative_glossary.pdf',
         },
       ],
-      'restorative_dentistry_glossary_definitions.pdf',
+      'restorative_glossary.pdf',
     );
 
     const builtPack = JSON.parse(importService.lastRawPack ?? '{}') as {

@@ -30,7 +30,7 @@ This makes the project a strong fit for both:
 - `Future of Education`
 - `Safety & Trust`
 
-It also fits the local-first spirit of the mobile-specialized tracks because the product is designed around on-device workflows, even though the strongest competition demo uses a desktop-local Gemma bridge for higher quality.
+It also follows a local-first product philosophy: user files stay local, inference is run on local hardware in the demo path, and the app does not depend on a hosted cloud model.
 
 ## Gemma 4 Use
 
@@ -73,7 +73,7 @@ Lecture Companion is intentionally structured as a maintainable app rather than 
 
 - SQLite + Drizzle persistence
 - grounded import pipeline
-- multimodal evidence indexing
+- grounded evidence indexing for uploaded lecture assets
 - retrieval and reranking pipeline
 - Gemma runtime adapters for desktop and Android-oriented local paths
 
@@ -172,7 +172,7 @@ Lecture Companion shows Gemma 4 in a practical, trustworthy workflow:
 - `Main Track`
 - `Future of Education`
 - `Safety & Trust`
-- potentially `Cactus Prize` because the user-facing product is local-first mobile-oriented, with desktop-local routing used to improve demo quality during development and evaluation
+- optional special-track consideration only if the form asks for local-first mobile routing projects; the strongest fit remains education plus safety/trust
 
 ## Repository Deliverables
 

@@ -1,6 +1,8 @@
 # Lecture Companion
 
-Lecture Companion is a professional offline-first mobile app foundation for audience members in live lectures. The app runs locally on device with no backend, no authentication, no cloud sync, and no external APIs. Every answer is grounded only in local lecture data imported into the device.
+Lecture Companion is a professional offline-first lecture assistant for students and live-course audiences. Users upload their own lecture files, the app builds a local grounded evidence workspace, and every supported answer stays tied to the uploaded material.
+
+For the Kaggle Gemma 4 Good Hackathon demo, the Android app/emulator is the user-facing shell and Gemma 4 E4B runs locally on the evaluator's PC through the desktop bridge. There is no hosted backend, no cloud inference API, and no redistributed model weight bundle.
 
 ## Judge Quickstart
 
@@ -22,18 +24,18 @@ Submission materials are summarized in [COMPETITION_WRITEUP.md](./COMPETITION_WR
 - import a lecture pack onto the device
 - persist the lecture session graph locally in SQLite
 - answer only from grounded lecture materials, glossary entries, and transcript content
-- keep notes, bookmarks, summaries, and seeded public Q&A local to the device
 - keep notes, bookmarks, summaries, and optional public Q&A local to the device
 
 ## Offline-First Design
 
 - SQLite is the only persistence layer.
 - The app starts clean with no bundled lecture session imported by default.
-- No network calls are required at runtime.
-- `google/gemma-4-E2B-it` is the configured local Gemma target model ID.
-- The exact model lives under `models/google/gemma-4-E2B-it/` inside the repo tree.
+- No hosted cloud service is required for the competition demo flow.
+- The Android emulator talks to the desktop-local Gemma bridge over localhost during the E4B demo.
+- `google/gemma-4-E4B-it` is the documented competition demo model and lives under `models/google/gemma-4-E4B-it/source/`.
+- `google/gemma-4-E2B-it` remains the optional Android phone-local GGUF target under `models/google/gemma-4-E2B-it/`.
 - Unsupported questions return an explicit unsupported state instead of speculative chat behavior.
-- Web renders an unsupported shell because the production target is native mobile and the real Gemma runtime path is Android-only in this pass.
+- Web renders an unsupported shell because the real product workflow is native mobile plus local Gemma runtime integration.
 
 ## Architecture Layers
 
@@ -121,30 +123,45 @@ This app is intentionally not a free-form chatbot.
 
 ## Gemma 4 Targets
 
-The mobile app remains designed around `google/gemma-4-E2B-it` because it is the smallest published Gemma 4 instruction-tuned variant in the current Gemma 4 lineup. The competition-quality desktop demo profile now targets `google/gemma-4-E4B-it` on an RTX 3060 12 GB class GPU for better grounded answer quality.
+The repository has two clearly separated Gemma lanes:
+
+- Competition demo lane: `google/gemma-4-E4B-it` on a desktop-local RTX 3060 12 GB class GPU using CUDA + bitsandbytes 4-bit NF4. This is the recommended judge path because it gives the best grounded answer quality.
+- Optional phone-local lane: `google/gemma-4-E2B-it` as a GGUF Android artifact through a `llama.rn` / `llama.cpp` style backend. This path is kept as a deployment experiment and is not the primary competition demo claim.
 
 - `src/shared/config/modelConfig.ts` is the single place that selects the target model.
 - `LLMService` remains the app-facing text generation contract.
 - `GemmaAdapter` is the infrastructure seam for local Gemma execution.
 - Android uses a strict local-runtime path: if Gemma is unavailable, the app surfaces a runtime error instead of silently falling back to mock generation.
-- Web and iOS remain unsupported for true Gemma runtime in this pass and use non-native fallback behavior outside Android.
+- Web and iOS remain unsupported for true Gemma runtime in this pass.
 - If mobile packaging later needs a different on-device runtime or model format, the adapter backend can change without rewriting app logic.
 - True phone-local deployment feasibility still depends on runtime overhead, usable context size, memory pressure, battery impact, and platform tooling maturity.
-- The current Android runtime path is GGUF-first through `llama.rn` and a `llama.cpp`-style local backend.
-- The current Android artifact target is the standard `Q3_K_S` GGUF quant for the exact `google/gemma-4-E2B-it` lineage, chosen because the earlier ultra-aggressive `UD-IQ2_M` file failed to load through the current Android llama runtime on-device.
 - TurboQuant is not the app-bundle workaround here because it compresses KV cache at runtime instead of materially shrinking the model file users must store on-device.
 - The current Android status/native bridge still sits behind the adapter seam, so the app logic can survive a future move to a different GGUF-capable backend without rewriting application logic.
-- The desktop demo harness uses `google/gemma-4-E4B-it` with bitsandbytes 4-bit NF4 by default on the RTX 3060 12 GB target, with `--quantization bnb-8bit` reserved for GPUs with more headroom.
+- The desktop demo bridge uses `google/gemma-4-E4B-it` with bitsandbytes 4-bit NF4 by default on the RTX 3060 12 GB target, with `--quantization bnb-8bit` reserved for GPUs with more headroom.
 
 ## Repo-Local Model Workflow
 
-The exact model stays inside the repo tree:
+Model binaries stay inside the repo tree during local development but are gitignored by default.
+
+Competition demo model path:
+
+- `models/google/gemma-4-E4B-it/source/`
+- `models/google/gemma-4-E4B-it/manifest.json`
+
+Optional Android GGUF model path:
 
 - `models/google/gemma-4-E2B-it/source/`
 - `models/google/gemma-4-E2B-it/android/`
 - `models/google/gemma-4-E2B-it/manifest.json`
 
-Developer flow:
+Competition demo flow:
+
+1. `npm run model:download:desktop`
+2. `npm run check`
+3. `npm run model:desktop:bridge`
+4. `npm run android:dev`
+
+Optional Android phone-local flow:
 
 1. `npm run model:download`
 2. `npm run model:download:android`
@@ -152,7 +169,7 @@ Developer flow:
 4. `npm run model:stage:android`
 5. `npm run android:dev`
 
-Production flow:
+Optional production Android GGUF flow:
 
 1. `npm run model:download`
 2. `npm run model:download:android`
@@ -162,7 +179,7 @@ Production flow:
 
 Notes:
 
-- The model binaries live inside the project directory tree but are gitignored by default because of size.
+- The competition submission does not redistribute Gemma weights; judges download the official model into the documented local path.
 - Development builds can still stage the Android GGUF artifact into the installed app's private files directory at `files/lecture-companion/gemma-4-E2B-it-Q3_K_S.gguf`.
 - Production builds now package the selected GGUF as an Android asset and install it into the same private path on first launch, so the shipped app no longer depends on a PC-side staging step.
 - `npm run model:download:android` downloads the repo-local GGUF artifact for the same `google/gemma-4-E2B-it` target lineage into `models/google/gemma-4-E2B-it/android/`.
@@ -238,11 +255,11 @@ Important notes for reproduction:
 
 ## Android Release Readiness
 
-The repo is now configured for a clean Android release path:
+The repo is configured for a clean Android release path, separate from the desktop-local E4B competition demo:
 
 - production builds resolve through `app.config.js` with `APP_ENV=production`
 - the production Android package id is `com.endodontist27.lecturecompanion`
-- production Android builds package the selected GGUF from `models/google/gemma-4-E2B-it/android/` and install it into app-private storage on first launch
+- optional phone-local production Android builds package the selected GGUF from `models/google/gemma-4-E2B-it/android/` and install it into app-private storage on first launch
 - production config blocks development-only permissions such as `SYSTEM_ALERT_WINDOW`
 - release signing is no longer allowed to fall back to the debug keystore
 - `android/keystore.properties.example` documents the upload-key shape expected by Gradle
@@ -268,6 +285,19 @@ Sources:
 - [About Android App Bundles](https://developer.android.com/guide/app-bundle)
 
 ## Run Locally
+
+Competition demo path:
+
+```bash
+npm install
+npm run db:generate
+npm run check
+npm run model:download:desktop
+npm run model:desktop:bridge
+npm run android:dev
+```
+
+Optional Android GGUF path:
 
 ```bash
 npm install
@@ -331,6 +361,8 @@ models/
     gemma-4-E2B-it/
       source/
       android/
+    gemma-4-E4B-it/
+      source/
 modules/
   gemma-runtime/
   pdf-text-extractor/

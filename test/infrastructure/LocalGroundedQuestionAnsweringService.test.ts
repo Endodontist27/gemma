@@ -103,7 +103,7 @@ describe('LocalGroundedQuestionAnsweringService', () => {
         {
           sourceType: 'evidence_unit',
           sourceRecordId: 'evidence_slide_8',
-          label: 'THE RESTO | Slide 8 visual',
+          label: 'Restorative Concepts | Slide 8 visual',
           excerpt: 'Restoration diagram labeling deep margin elevation.',
           score: 2.8,
         },

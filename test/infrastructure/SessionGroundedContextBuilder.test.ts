@@ -89,7 +89,7 @@ const evidenceUnitRepository: EvidenceUnitRepository = {
       sourceType: 'asset',
       sourceRecordId: null,
       modality: 'slide',
-      title: 'THE RESTO | Slide 8 visual',
+      title: 'Restorative Concepts | Slide 8 visual',
       excerpt: 'Restoration diagram labeling deep margin elevation.',
       contentText: 'The slide image labels deep margin elevation and the restorative margin relationship.',
       searchText: 'restoration diagram deep margin elevation restorative margin relationship',
@@ -115,7 +115,7 @@ const uploadedAssetRepository: UploadedAssetRepository = {
     {
       id: 'asset_resto_pptx',
       sessionId: 'session_endo',
-      fileName: 'THE RESTO.pptx',
+      fileName: 'Restorative Concepts.pptx',
       mediaType: 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
       sourceKind: 'material',
       sourceExtension: 'pptx',
@@ -188,7 +188,7 @@ describe('SessionGroundedContextBuilder', () => {
       {
         sourceType: 'evidence_unit',
         sourceRecordId: 'evidence_slide_8',
-        label: 'THE RESTO | Slide 8 visual',
+        label: 'Restorative Concepts | Slide 8 visual',
         excerpt: 'Restoration diagram labeling deep margin elevation.',
         score: 2.8,
       },
@@ -202,7 +202,7 @@ describe('SessionGroundedContextBuilder', () => {
 
     expect(visuals).toHaveLength(1);
     expect(visuals[0]?.caption).toContain('Slide 8');
-    expect(visuals[0]?.caption).toContain('THE RESTO.pptx');
+    expect(visuals[0]?.caption).toContain('Restorative Concepts.pptx');
     expect(visuals[0]?.uri).toContain('data:image/jpeg;base64');
   });
 });
