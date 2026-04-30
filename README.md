@@ -4,6 +4,29 @@ Lecture Companion is a professional local-hardware audience companion for live l
 
 For the Kaggle Gemma 4 Good Hackathon demo, the Android app/emulator is the audience-facing interface and Gemma 4 E4B runs locally on the evaluator's PC through the desktop bridge. E4B is not phone-resident in this demo. The project avoids hosted cloud inference and does not redistribute model weights.
 
+## Demo Gallery
+
+These screens come from the real Android emulator demo flow. Full-size media and captions are available in [submission-media/MEDIA_GALLERY.md](./submission-media/MEDIA_GALLERY.md).
+
+<table>
+  <tr>
+    <td width="50%">
+      <img src="./submission-media/gallery-01-audience-ask-grounded-answer.png" alt="Audience asks a private lecture question and receives a grounded answer with cited passages" />
+    </td>
+    <td width="50%">
+      <img src="./submission-media/gallery-02-answer-traceability.png" alt="Answer traceability screen showing the cited excerpt and original lecture source" />
+    </td>
+  </tr>
+  <tr>
+    <td width="50%">
+      <img src="./submission-media/gallery-03-one-workspace-uploaded-files.png" alt="One grounded lecture workspace containing uploaded lecture files" />
+    </td>
+    <td width="50%">
+      <img src="./submission-media/gallery-04-community-shared-qa.png" alt="Community feed showing shared grounded questions from the lecture audience" />
+    </td>
+  </tr>
+</table>
+
 ## Judge Quickstart
 
 This repository is prepared for the Kaggle Gemma 4 Good Hackathon. The code is public and reproducible, but Gemma model weights are intentionally excluded from git because of size and upstream licensing terms.
