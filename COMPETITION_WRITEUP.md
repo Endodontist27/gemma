@@ -2,23 +2,41 @@
 
 ## Gemma 4 Good Hackathon Write-Up
 
-Lecture Companion is a local-first study and lecture support app built for real educational use, not just a prompt demo. Students upload lecture materials directly into the app, the system indexes those files into grounded local evidence, and every answer stays tied to the uploaded course content. The project is designed to help learners review complex teaching material, ask focused questions, inspect exactly where answers came from, and build notes from traceable evidence.
+Lecture Companion is a local-first audience companion for live lectures. The lecturer provides slides, PDFs, notes, glossary files, or other course material, and audience members use their phones during or after the lecture to ask clarifying questions. Gemma answers from the uploaded lecture evidence, not generic outside knowledge, and every supported answer can be traced back to the exact source.
 
-The app targets a common real-world learning problem: students are overwhelmed by dense lecture material, scattered notes, slide decks, definitions, and class documents, yet most AI tools answer from generic outside knowledge or require cloud services. Lecture Companion is built to stay grounded, private, and reproducible. It does not depend on a hosted backend for inference in the competition demo path once the local model is installed.
+The app targets a common real-world learning problem: lecture Q&A does not scale. A lecturer can answer two or three questions live, but many people stay silent because they are embarrassed, they do not want to interrupt, or they forget their question before Q&A time. Lecture Companion gives the audience a safer way to ask, a community space to see questions others choose to share, and a feedback signal that helps the lecturer understand what the room did not understand.
+
+Lecture Companion is built to stay grounded, private, and reproducible. It does not depend on a hosted backend for inference in the competition demo path once the local model is installed.
+
+## Problems Solved
+
+- Lecturers can only answer a few questions live, so many audience questions are never addressed.
+- Audience members may feel embarrassed to ask questions publicly.
+- People often forget their questions before Q&A time.
+- Students leave lectures with unclear concepts but no grounded way to clarify them later.
+- Generic AI answers may hallucinate or ignore the actual lecture material.
+- Lecture materials are scattered across slides, PDFs, notes, glossaries, and transcripts.
+- Other audience members may have the same confusion, but there is no shared question space.
+- Lecturers lack visibility into what the audience did not understand.
+- Post-lecture feedback is usually too vague to improve teaching in real time.
+- Students need answers that are traceable back to the exact lecture source.
 
 ## What The Project Does
 
 - imports lecture material from local files such as PDF, PPTX, Markdown, TXT, CSV, and structured JSON
 - merges uploaded files into one active lecture workspace
 - builds searchable grounded evidence from the uploaded files
-- answers questions only from the uploaded lecture evidence or returns `unsupported`
+- lets audience members ask clarifying questions during or after the lecture
+- supports the product direction of private, anonymous, and community-shared questions
+- answers only from the uploaded lecture evidence or returns `unsupported`
 - shows answer traceability so users can inspect the exact supporting source
 - lets users bookmark evidence and create notes anchored to that exact source
+- gives the lecturer a path toward understanding audience confusion through shared questions and feedback signals
 - stores sessions, evidence, questions, answers, notes, bookmarks, and digests locally in SQLite
 
 ## Why This Matters
 
-Many educational AI tools are impressive in short demos but weak in trust. They hallucinate, lose provenance, or require cloud connections that are unrealistic in low-connectivity classrooms and privacy-sensitive settings. Lecture Companion is intentionally opinionated:
+Many educational AI tools are impressive in short demos but weak in trust. They hallucinate, lose provenance, or ignore the social reality of live lectures: people hesitate to ask, time runs out, and the lecturer cannot see every confusion point. Lecture Companion is intentionally opinionated:
 
 - no free-form ungrounded answers
 - no silent fallback to outside knowledge
@@ -108,13 +126,14 @@ If the evidence is not sufficient, the app returns `unsupported`.
 The most important things to verify are:
 
 1. upload lecture files locally
-2. ask a course-specific question
+2. ask a course-specific clarification question as an audience member
 3. confirm the answer is grounded in the uploaded material
 4. inspect answer traceability
 5. create a note from an evidence source
-6. verify that no cloud inference service is required for the demo flow once the local model is available
+6. review the Community direction as the shared audience-question space
+7. verify that no cloud inference service is required for the demo flow once the local model is available
 
-Good example questions are definition and concept questions from the uploaded lecture material, especially when the answer must come from a glossary entry, slide text, or indexed evidence rather than from generic outside knowledge.
+Good example questions are the kinds of clarifying questions people hesitate to ask live: definitions, missed slide concepts, “what does this mean?” questions, and lecture-specific follow-ups where the answer must come from a glossary entry, slide text, or indexed evidence rather than from generic outside knowledge.
 
 ## Reproduction Guide
 
@@ -135,7 +154,7 @@ Good example questions are definition and concept questions from the uploaded le
 6. Start the local desktop Gemma bridge with `npm run model:desktop:bridge`.
 7. Start the Android development build / emulator flow.
 8. Upload lecture files in the app.
-9. Ask grounded questions and inspect the cited sources.
+9. Ask audience-style clarification questions and inspect the cited sources.
 
 ### Important Note
 
@@ -145,10 +164,14 @@ Model weights are intentionally excluded from the Git repository due size and re
 
 - local-first educational workflow
 - grounded answers instead of generic chatbot responses
+- audience-first lecture Q&A rather than lecturer-only tooling
+- anonymous/private question direction for people who are embarrassed to ask publicly
+- community question direction so students can learn from questions others choose to share
+- lecturer insight direction that makes audience confusion visible
 - answer traceability built into the Ask experience
 - maintainable layered architecture
 - local SQLite persistence instead of one monolithic blob
-- realistic user flow for lecture review and study support
+- realistic user flow for live and post-lecture clarification
 
 ## Current Limitations
 
@@ -162,6 +185,7 @@ Model weights are intentionally excluded from the Git repository due size and re
 Lecture Companion shows Gemma 4 in a practical, trustworthy workflow:
 
 - it solves a real learning problem
+- it gives every audience question a path, even when live Q&A time is limited
 - it uses Gemma for grounded reasoning rather than generic chat
 - it emphasizes transparency and source-based answers
 - it respects offline and privacy constraints

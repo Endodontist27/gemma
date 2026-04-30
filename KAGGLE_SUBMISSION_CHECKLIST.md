@@ -34,13 +34,14 @@ Use this checklist for the final Gemma 4 Good Hackathon submission.
 Keep the video short and direct.
 
 1. Show the app starting in a clean workspace.
-2. Upload real lecture files.
-3. Show the workspace indexing state.
-4. Ask one grounded question that succeeds.
+2. Frame the live lecture problem: many audience questions are never asked or answered.
+3. Upload real lecturer-provided files.
+4. Ask one audience-style clarification question that succeeds.
 5. Open a cited source from the answer.
-6. Create a note anchored to that source.
-7. Ask one unsupported question and show that the app refuses to guess.
-8. Mention that the demo uses local `google/gemma-4-E4B-it` through the desktop bridge.
+6. Show how the question can become part of the audience/community learning loop.
+7. Create a note anchored to that source.
+8. Ask one unsupported question and show that the app refuses to guess.
+9. Mention that the demo uses local `google/gemma-4-E4B-it` through the desktop bridge.
 
 ## Live Demo Option
 
@@ -54,7 +55,7 @@ Avoid promising a hosted cloud backend. The product story is local-first.
 
 ## Paste-Ready Short Description
 
-Lecture Companion is a local-first study app for lecture audiences. Users upload PDFs, PPTX files, notes, and glossary material into one active workspace. The app indexes those files locally, uses Gemma 4 to answer only from the uploaded evidence, and exposes source traceability for every supported answer. Students can inspect citations, bookmark evidence, and create notes anchored to the source that supported the answer. The competition demo uses `google/gemma-4-E4B-it` locally on desktop hardware for high-quality grounded reasoning, while the mobile app provides the lecture workflow and Android UI.
+Lecture Companion is a local-first audience companion for live lectures. The lecturer provides PDFs, PPTX slides, notes, and glossary material; the audience uses phones during or after the lecture to ask clarifying questions, optionally keep questions private or anonymous, and learn from questions others choose to share. The app indexes the uploaded lecture files locally, uses Gemma 4 to answer only from that evidence, and exposes source traceability for every supported answer. Students can inspect citations, bookmark evidence, and create notes anchored to the source that supported the answer. The product also creates a path for lecturer insight by showing what the audience is confused about. The competition demo uses `google/gemma-4-E4B-it` locally on desktop hardware for high-quality grounded reasoning, while the mobile app provides the audience workflow and Android UI.
 
 ## Final Sanity Check
 

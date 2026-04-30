@@ -1,6 +1,6 @@
 # Lecture Companion
 
-Lecture Companion is a professional offline-first lecture assistant for students and live-course audiences. Users upload their own lecture files, the app builds a local grounded evidence workspace, and every supported answer stays tied to the uploaded material.
+Lecture Companion is a professional offline-first audience companion for live lectures. A lecturer can provide the lecture files once, and audience members use their phones during or after the session to ask clarifying questions, optionally stay anonymous, see shared community questions, and receive Gemma-grounded answers tied to the actual lecture material.
 
 For the Kaggle Gemma 4 Good Hackathon demo, the Android app/emulator is the user-facing shell and Gemma 4 E4B runs locally on the evaluator's PC through the desktop bridge. There is no hosted backend, no cloud inference API, and no redistributed model weight bundle.
 
@@ -15,7 +15,7 @@ This repository is prepared for the Kaggle Gemma 4 Good Hackathon. The code is p
 5. Run `npm run check`.
 6. Start the desktop demo bridge with `npm run model:desktop:bridge`.
 7. Run the Android emulator UI with `npm run android:dev`.
-8. Upload lecture files locally and ask grounded questions in the Ask tab.
+8. Upload lecture files locally, ask audience-style clarification questions in the Ask tab, and inspect cited sources.
 
 Submission materials are summarized in [COMPETITION_WRITEUP.md](./COMPETITION_WRITEUP.md) and [KAGGLE_SUBMISSION_CHECKLIST.md](./KAGGLE_SUBMISSION_CHECKLIST.md).
 
@@ -24,7 +24,27 @@ Submission materials are summarized in [COMPETITION_WRITEUP.md](./COMPETITION_WR
 - import a lecture pack onto the device
 - persist the lecture session graph locally in SQLite
 - answer only from grounded lecture materials, glossary entries, and transcript content
-- keep notes, bookmarks, summaries, and optional public Q&A local to the device
+- support audience questions that can be private, anonymous, or shared to the local community
+- keep notes, bookmarks, summaries, community Q&A, and lecturer insight signals local to the device
+
+## Problem
+
+Lecture Q&A does not scale well in real rooms.
+
+- Lecturers can only answer a few questions live, so many audience questions are never addressed.
+- Audience members may feel embarrassed to ask questions publicly.
+- People often forget their questions before Q&A time.
+- Students leave lectures with unclear concepts but no grounded way to clarify them later.
+- Generic AI answers may hallucinate or ignore the actual lecture material.
+- Lecture materials are scattered across slides, PDFs, notes, glossaries, and transcripts.
+- Other audience members may have the same confusion, but there is no shared question space.
+- Lecturers lack visibility into what the audience did not understand.
+- Post-lecture feedback is usually too vague to improve teaching in real time.
+- Students need answers that are traceable back to the exact lecture source.
+
+## Solution
+
+Lecture Companion creates a local audience layer around a lecture. The lecturer-provided files become the source of truth, Gemma 4 answers questions from those files, and the audience can ask without interrupting the room. Shared questions and aggregated confusion signals help the lecturer understand what needs clarification during or after the session.
 
 ## Offline-First Design
 
@@ -237,7 +257,7 @@ Recommended judge flow:
 4. Run `npm run check`.
 5. Run `npm run model:desktop:bridge`.
 6. Run the Android emulator shell with `npm run android:dev` or launch the existing development build.
-7. Upload lecture files locally in the app and ask grounded questions.
+7. Upload lecture files locally in the app and ask audience-style clarification questions.
 
 Important notes for reproduction:
 
