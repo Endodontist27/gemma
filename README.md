@@ -2,6 +2,21 @@
 
 Lecture Companion is a professional offline-first mobile app foundation for audience members in live lectures. The app runs locally on device with no backend, no authentication, no cloud sync, and no external APIs. Every answer is grounded only in local lecture data imported into the device.
 
+## Judge Quickstart
+
+This repository is prepared for the Kaggle Gemma 4 Good Hackathon. The code is public and reproducible, but Gemma model weights are intentionally excluded from git because of size and upstream licensing terms.
+
+1. Clone the repository from `https://github.com/Endodontist27/gemma`.
+2. Run `npm install`.
+3. Run `npm run db:generate`.
+4. Download the official `google/gemma-4-E4B-it` model into `models/google/gemma-4-E4B-it/source/`.
+5. Run `npm run check`.
+6. Start the desktop demo bridge with `npm run model:desktop:bridge`.
+7. Run the Android emulator UI with `npm run android:dev`.
+8. Upload lecture files locally and ask grounded questions in the Ask tab.
+
+Submission materials are summarized in [COMPETITION_WRITEUP.md](./COMPETITION_WRITEUP.md) and [KAGGLE_SUBMISSION_CHECKLIST.md](./KAGGLE_SUBMISSION_CHECKLIST.md).
+
 ## Purpose
 
 - import a lecture pack onto the device
