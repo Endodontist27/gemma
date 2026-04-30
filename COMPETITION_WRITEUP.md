@@ -2,11 +2,11 @@
 
 ## Gemma 4 Good Hackathon Write-Up
 
-Lecture Companion is a local-first audience companion for live lectures. The lecturer provides slides, PDFs, notes, glossary files, or other course material, and audience members use their phones during or after the lecture to ask clarifying questions. Gemma answers from the uploaded lecture evidence, not generic outside knowledge, and every supported answer can be traced back to the exact source.
+Lecture Companion is a local-hardware audience companion for live lectures. The lecturer provides slides, PDFs, notes, glossary files, or other course material, and audience members use their phones during or after the lecture to ask clarifying questions. Gemma answers from the uploaded lecture evidence, not generic outside knowledge, and every supported answer can be traced back to the exact source.
 
 The app targets a common real-world learning problem: lecture Q&A does not scale. A lecturer can answer two or three questions live, but many people stay silent because they are embarrassed, they do not want to interrupt, or they forget their question before Q&A time. Lecture Companion gives the audience a safer way to ask, a community space to see questions others choose to share, and a feedback signal that helps the lecturer understand what the room did not understand.
 
-Lecture Companion is built to stay grounded, private, and reproducible. It does not depend on a hosted backend for inference in the competition demo path once the local model is installed.
+Lecture Companion is built to stay grounded, private, and reproducible. In the competition demo, the Android app/emulator is the audience-facing interface and Gemma 4 E4B runs on a local desktop GPU through a bridge. E4B is not phone-resident in this demo. The demo does not depend on a hosted cloud inference API once the local model is installed.
 
 ## Problems Solved
 
@@ -40,7 +40,7 @@ Many educational AI tools are impressive in short demos but weak in trust. They 
 
 - no free-form ungrounded answers
 - no silent fallback to outside knowledge
-- no requirement for a backend service
+- no requirement for a hosted cloud inference service
 - local evidence remains the source of truth
 
 This makes the project a strong fit for both:
@@ -48,7 +48,7 @@ This makes the project a strong fit for both:
 - `Future of Education`
 - `Safety & Trust`
 
-It also follows a local-first product philosophy: user files stay local, inference is run on local hardware in the demo path, and the app does not depend on a hosted cloud model.
+It also follows a local-hardware product philosophy: user files stay in the local app workspace, inference runs on user-controlled desktop hardware in the demo path, and the app does not depend on a hosted cloud model.
 
 ## Gemma 4 Use
 
@@ -58,7 +58,7 @@ The competition-quality demo path uses:
 - local desktop execution on an RTX 3060 12 GB class GPU
 - CUDA + bitsandbytes 4-bit NF4 as the stable quality/performance profile
 
-The mobile project also includes a smaller Android-oriented local path around:
+The mobile project also includes an experimental smaller Android-oriented path around:
 
 - `google/gemma-4-E2B-it`
 - GGUF / llama.cpp-style runtime integration through `llama.rn`
@@ -162,7 +162,7 @@ Model weights are intentionally excluded from the Git repository due size and re
 
 ## Product Strengths
 
-- local-first educational workflow
+- local-hardware educational workflow
 - grounded answers instead of generic chatbot responses
 - audience-first lecture Q&A rather than lecturer-only tooling
 - anonymous/private question direction for people who are embarrassed to ask publicly
@@ -175,7 +175,7 @@ Model weights are intentionally excluded from the Git repository due size and re
 
 ## Current Limitations
 
-- the strongest competition demo path is desktop-local rather than pure phone-local
+- the strongest competition demo path is desktop-local; E4B is not presented as phone-resident
 - some multimodal ingestion paths are stronger than others depending on file type
 - large visual contexts can still pressure a 12 GB GPU, so the bridge uses careful fallback logic
 - PPTX full-slide visual rendering is less complete than text extraction plus embedded media handling on this machine
@@ -188,7 +188,7 @@ Lecture Companion shows Gemma 4 in a practical, trustworthy workflow:
 - it gives every audience question a path, even when live Q&A time is limited
 - it uses Gemma for grounded reasoning rather than generic chat
 - it emphasizes transparency and source-based answers
-- it respects offline and privacy constraints
+- it avoids hosted cloud inference in the demo path and keeps lecture data in local app storage
 - it demonstrates how Gemma can power a full application, not just a benchmark script
 
 ## Suggested Track Fit
@@ -196,7 +196,7 @@ Lecture Companion shows Gemma 4 in a practical, trustworthy workflow:
 - `Main Track`
 - `Future of Education`
 - `Safety & Trust`
-- optional special-track consideration only if the form asks for local-first mobile routing projects; the strongest fit remains education plus safety/trust
+- optional special-track consideration only if the form asks for mobile interfaces that route heavyweight reasoning to local user-controlled hardware; the strongest fit remains education plus safety/trust
 
 ## Repository Deliverables
 

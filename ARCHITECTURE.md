@@ -240,11 +240,11 @@ Why:
 - `scripts/gemma/desktop_harness.py` provides a desktop-local E4B harness for grounded prompt and output testing on an RTX 3060 12 GB class PC.
 - `GemmaAdapter` exposes runtime status and warmup in addition to text generation.
 - `resolveLLMService()` is strict on Android: it does not silently fall back to mock generation when the native runtime is unavailable.
-- The app continues to assume local-first inference only. There are still no cloud APIs in the stack.
-- Practical phone-local deployment is still conditional on runtime overhead, usable context windows, memory limits, and platform tooling support.
+- The competition demo uses local desktop inference through the bridge and does not rely on hosted cloud inference APIs.
+- Practical fully phone-resident deployment is still conditional on runtime overhead, usable context windows, memory limits, and platform tooling support.
 - The current Android artifact target is the standard `Q3_K_S` GGUF quant for the exact `google/gemma-4-E2B-it` lineage. This keeps the model in the multi-GB range, but avoids the more aggressive `UD-IQ2_M` path that failed to load through the current Android llama runtime.
 - The desktop harness defaults to CUDA + bitsandbytes 4-bit NF4 for E4B on the RTX 3060 12 GB target, with `--quantization bnb-8bit` available only when the GPU has more free headroom.
-- TurboQuant is not the answer for app-bundle size here. It targets KV-cache compression at runtime rather than shrinking the GGUF file that users must store on-device.
+- TurboQuant is not the answer for app-bundle size here. It targets KV-cache compression at runtime rather than shrinking the GGUF file that users must store.
 - The Android status bridge still isolates device capability, packaged-asset installation, and installed-file checks behind `GemmaAdapter`, so the application layer can survive future GGUF backend swaps without being rewritten.
 
 ## Why The UI Is Still Intentionally Minimal

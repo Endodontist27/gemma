@@ -27,7 +27,7 @@ Use this checklist for the final Gemma 4 Good Hackathon submission.
 - Main Track
 - Future of Education
 - Safety & Trust
-- Cactus Prize only if the submission form invites a special-track selection and the description is framed carefully as a mobile workflow that routes heavyweight Gemma reasoning to a local desktop runtime. Do not lead with this over the education and trust tracks.
+- Cactus Prize only if the submission form invites a special-track selection and the description is framed carefully as a mobile interface that routes heavyweight Gemma reasoning to local desktop hardware. Do not lead with this over the education and trust tracks.
 
 ## Demo Video Checklist
 
@@ -51,11 +51,11 @@ Preferred simple option:
 - Attach lightweight demo files or screenshots if Kaggle asks for files.
 - Explain that model weights are not redistributed and must be downloaded from the official Gemma source into the documented local path.
 
-Avoid promising a hosted cloud backend. The product story is local-first.
+Avoid promising phone-resident E4B or a hosted cloud backend. The product story is Android audience UI plus local desktop Gemma inference on user-controlled hardware.
 
 ## Paste-Ready Short Description
 
-Lecture Companion is a local-first audience companion for live lectures. The lecturer provides PDFs, PPTX slides, notes, and glossary material; the audience uses phones during or after the lecture to ask clarifying questions, optionally keep questions private or anonymous, and learn from questions others choose to share. The app indexes the uploaded lecture files locally, uses Gemma 4 to answer only from that evidence, and exposes source traceability for every supported answer. Students can inspect citations, bookmark evidence, and create notes anchored to the source that supported the answer. The product also creates a path for lecturer insight by showing what the audience is confused about. The competition demo uses `google/gemma-4-E4B-it` locally on desktop hardware for high-quality grounded reasoning, while the mobile app provides the audience workflow and Android UI.
+Lecture Companion is a local-hardware audience companion for live lectures. The lecturer provides PDFs, PPTX slides, notes, and glossary material; the audience uses phones during or after the lecture to ask clarifying questions, optionally keep questions private or anonymous, and learn from questions others choose to share. The app indexes the uploaded lecture files in local app storage, uses Gemma 4 to answer only from that evidence, and exposes source traceability for every supported answer. Students can inspect citations, bookmark evidence, and create notes anchored to the source that supported the answer. The product also creates a path for lecturer insight by showing what the audience is confused about. The competition demo uses `google/gemma-4-E4B-it` on local desktop hardware for high-quality grounded reasoning, while the Android app/emulator provides the audience-facing interface. E4B is not phone-resident in this demo, and the demo does not require a hosted cloud inference API once the model is installed locally.
 
 ## Final Sanity Check
 

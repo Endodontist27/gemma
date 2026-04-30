@@ -1,6 +1,6 @@
 # Database
 
-Lecture Companion uses SQLite on device with Drizzle ORM. The schema is organized by bounded context under `src/infrastructure/database/schema/`, and runtime migrations are generated into `src/infrastructure/database/migrations/appMigrations.ts`.
+Lecture Companion uses SQLite in the Android app with Drizzle ORM. The schema is organized by bounded context under `src/infrastructure/database/schema/`, and runtime migrations are generated into `src/infrastructure/database/migrations/appMigrations.ts`.
 
 ## Schema Layout
 

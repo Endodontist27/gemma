@@ -1,8 +1,8 @@
 # Lecture Companion
 
-Lecture Companion is a professional offline-first audience companion for live lectures. A lecturer can provide the lecture files once, and audience members use their phones during or after the session to ask clarifying questions, optionally stay anonymous, see shared community questions, and receive Gemma-grounded answers tied to the actual lecture material.
+Lecture Companion is a professional local-hardware audience companion for live lectures. A lecturer can provide the lecture files once, and audience members use their phones during or after the session to ask clarifying questions, optionally stay anonymous, see shared community questions, and receive Gemma-grounded answers tied to the actual lecture material.
 
-For the Kaggle Gemma 4 Good Hackathon demo, the Android app/emulator is the user-facing shell and Gemma 4 E4B runs locally on the evaluator's PC through the desktop bridge. There is no hosted backend, no cloud inference API, and no redistributed model weight bundle.
+For the Kaggle Gemma 4 Good Hackathon demo, the Android app/emulator is the audience-facing interface and Gemma 4 E4B runs locally on the evaluator's PC through the desktop bridge. E4B is not phone-resident in this demo. The project avoids hosted cloud inference and does not redistribute model weights.
 
 ## Judge Quickstart
 
@@ -21,11 +21,11 @@ Submission materials are summarized in [COMPETITION_WRITEUP.md](./COMPETITION_WR
 
 ## Purpose
 
-- import a lecture pack onto the device
+- import a lecture pack into the local app workspace
 - persist the lecture session graph locally in SQLite
 - answer only from grounded lecture materials, glossary entries, and transcript content
 - support audience questions that can be private, anonymous, or shared to the local community
-- keep notes, bookmarks, summaries, community Q&A, and lecturer insight signals local to the device
+- keep notes, bookmarks, summaries, community Q&A, and lecturer insight signals in local app storage
 
 ## Problem
 
@@ -46,16 +46,16 @@ Lecture Q&A does not scale well in real rooms.
 
 Lecture Companion creates a local audience layer around a lecture. The lecturer-provided files become the source of truth, Gemma 4 answers questions from those files, and the audience can ask without interrupting the room. Shared questions and aggregated confusion signals help the lecturer understand what needs clarification during or after the session.
 
-## Offline-First Design
+## Local-Hardware Design
 
 - SQLite is the only persistence layer.
 - The app starts clean with no bundled lecture session imported by default.
 - No hosted cloud service is required for the competition demo flow.
 - The Android emulator talks to the desktop-local Gemma bridge over localhost during the E4B demo.
 - `google/gemma-4-E4B-it` is the documented competition demo model and lives under `models/google/gemma-4-E4B-it/source/`.
-- `google/gemma-4-E2B-it` remains the optional Android phone-local GGUF target under `models/google/gemma-4-E2B-it/`.
+- `google/gemma-4-E2B-it` remains an optional Android GGUF experiment under `models/google/gemma-4-E2B-it/`.
 - Unsupported questions return an explicit unsupported state instead of speculative chat behavior.
-- Web renders an unsupported shell because the real product workflow is native mobile plus local Gemma runtime integration.
+- Web renders an unsupported shell because the real product workflow is Android audience UI plus local Gemma runtime integration.
 
 ## Architecture Layers
 
@@ -114,7 +114,7 @@ Supported grounded source uploads:
 
 Current limitation:
 
-- searchable PDFs are supported through local on-device text extraction in the Android development build
+- searchable PDFs are supported through local Android text extraction in the development build
 - `.pptx` PowerPoint files are supported through local slide-text extraction before import
 - scanned PDFs without embedded text still need OCR before import
 - Word and spreadsheet files should still be exported to text-based formats before upload
@@ -146,16 +146,16 @@ This app is intentionally not a free-form chatbot.
 The repository has two clearly separated Gemma lanes:
 
 - Competition demo lane: `google/gemma-4-E4B-it` on a desktop-local RTX 3060 12 GB class GPU using CUDA + bitsandbytes 4-bit NF4. This is the recommended judge path because it gives the best grounded answer quality.
-- Optional phone-local lane: `google/gemma-4-E2B-it` as a GGUF Android artifact through a `llama.rn` / `llama.cpp` style backend. This path is kept as a deployment experiment and is not the primary competition demo claim.
+- Optional Android GGUF lane: `google/gemma-4-E2B-it` as a GGUF Android artifact through a `llama.rn` / `llama.cpp` style backend. This path is kept as a deployment experiment and is not the primary competition demo claim.
 
 - `src/shared/config/modelConfig.ts` is the single place that selects the target model.
 - `LLMService` remains the app-facing text generation contract.
 - `GemmaAdapter` is the infrastructure seam for local Gemma execution.
 - Android uses a strict local-runtime path: if Gemma is unavailable, the app surfaces a runtime error instead of silently falling back to mock generation.
 - Web and iOS remain unsupported for true Gemma runtime in this pass.
-- If mobile packaging later needs a different on-device runtime or model format, the adapter backend can change without rewriting app logic.
-- True phone-local deployment feasibility still depends on runtime overhead, usable context size, memory pressure, battery impact, and platform tooling maturity.
-- TurboQuant is not the app-bundle workaround here because it compresses KV cache at runtime instead of materially shrinking the model file users must store on-device.
+- If mobile packaging later needs a different Android runtime or model format, the adapter backend can change without rewriting app logic.
+- Future fully phone-resident deployment feasibility still depends on runtime overhead, usable context size, memory pressure, battery impact, and platform tooling maturity.
+- TurboQuant is not the app-bundle workaround here because it compresses KV cache at runtime instead of materially shrinking the model file users must store.
 - The current Android status/native bridge still sits behind the adapter seam, so the app logic can survive a future move to a different GGUF-capable backend without rewriting application logic.
 - The desktop demo bridge uses `google/gemma-4-E4B-it` with bitsandbytes 4-bit NF4 by default on the RTX 3060 12 GB target, with `--quantization bnb-8bit` reserved for GPUs with more headroom.
 
@@ -181,7 +181,7 @@ Competition demo flow:
 3. `npm run model:desktop:bridge`
 4. `npm run android:dev`
 
-Optional Android phone-local flow:
+Optional Android GGUF flow:
 
 1. `npm run model:download`
 2. `npm run model:download:android`
@@ -240,14 +240,14 @@ Notes:
 
 ## Competition Reproduction
 
-This repository is prepared for the Kaggle `Gemma 4 Good Hackathon` as a local-first app submission.
+This repository is prepared for the Kaggle `Gemma 4 Good Hackathon` as a local-hardware app submission.
 
 For the full submission narrative, architecture framing, judging flow, and suggested track fit, see [COMPETITION_WRITEUP.md](./COMPETITION_WRITEUP.md).
 
 - The repo contains the full application code, local indexing pipeline, Android/emulator UI shell, and desktop Gemma bridge.
 - The repo does **not** redistribute Gemma weights.
 - Judges should download the official Gemma model from the public source and place it in the documented repo-local `models/` path.
-- Once the official model is installed locally, the app runs without any cloud inference service.
+- Once the official model is installed on the local desktop runtime, the demo runs without any hosted cloud inference service.
 
 Recommended judge flow:
 
@@ -262,8 +262,8 @@ Recommended judge flow:
 Important notes for reproduction:
 
 - The desktop competition demo path is the recommended evaluation path because it uses the stronger local `google/gemma-4-E4B-it` model on an RTX 3060 12 GB class GPU.
-- Android phone-local runtime remains available through the smaller E2B GGUF path, but the higher-quality competition demo is the desktop E4B bridge.
-- User lecture files are imported locally and indexed into searchable grounded evidence units; no hosted backend is required.
+- An experimental Android GGUF runtime remains available through the smaller E2B path, but the higher-quality competition demo is the desktop E4B bridge.
+- User lecture files are imported locally and indexed into searchable grounded evidence units; no hosted cloud inference service or hosted backend is required.
 - Pretrained model weights are intentionally excluded from git because of size and licensing practicality, which is permitted as long as reproduction instructions identify the official source and the local setup clearly.
 
 ## Quality Gates
@@ -279,7 +279,7 @@ The repo is configured for a clean Android release path, separate from the deskt
 
 - production builds resolve through `app.config.js` with `APP_ENV=production`
 - the production Android package id is `com.endodontist27.lecturecompanion`
-- optional phone-local production Android builds package the selected GGUF from `models/google/gemma-4-E2B-it/android/` and install it into app-private storage on first launch
+- optional Android GGUF production builds package the selected GGUF from `models/google/gemma-4-E2B-it/android/` and install it into app-private storage on first launch
 - production config blocks development-only permissions such as `SYSTEM_ALERT_WINDOW`
 - release signing is no longer allowed to fall back to the debug keystore
 - `android/keystore.properties.example` documents the upload-key shape expected by Gradle
