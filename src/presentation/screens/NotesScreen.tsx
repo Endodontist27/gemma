@@ -17,13 +17,13 @@ export const NotesScreen = () => {
   return (
     <Screen>
       <ScreenHeader
-        eyebrow="Local notes"
-        subtitle="Capture session-specific notes and collect bookmarks from uploaded lecture evidence."
+        eyebrow="Learning trail"
+        subtitle="Save personal notes, bookmarked evidence, and source-linked clarifications from the lecture."
         title="Notes"
       />
       {!viewModel.activeSessionId ? (
         <EmptyState
-          description="Select an active session before creating notes or reviewing bookmarks."
+          description="Select an active workspace before creating notes or reviewing bookmarks."
           title="Choose a session first"
         />
       ) : null}
@@ -46,7 +46,7 @@ export const NotesScreen = () => {
 
       {viewModel.activeSessionId ? (
         <SectionCard
-          subtitle="Notes are stored locally in SQLite and attached to the active session."
+          subtitle="Attach a quick reminder, insight, or follow-up question to this lecture."
           title={isEditing ? 'Edit Note' : 'New Note'}
         >
           <TextInput
@@ -189,7 +189,12 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   entry: {
-    gap: 4,
+    backgroundColor: '#f7fcfc',
+    borderColor: '#cfe4e7',
+    borderRadius: 16,
+    borderWidth: 1,
+    gap: 7,
+    padding: 13,
   },
   error: {
     color: themeColors.danger,
@@ -202,12 +207,13 @@ const styles = StyleSheet.create({
   input: {
     minHeight: 110,
     borderWidth: 1,
-    borderColor: themeColors.borderStrong,
-    borderRadius: 16,
-    padding: 14,
-    backgroundColor: themeColors.surface,
+    borderColor: '#a9d5d8',
+    borderRadius: 20,
+    padding: 16,
+    backgroundColor: '#ffffff',
     textAlignVertical: 'top',
     fontSize: 15,
+    lineHeight: 22,
     color: themeColors.text,
   },
 });

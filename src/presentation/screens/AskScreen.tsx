@@ -27,8 +27,8 @@ export const AskScreen = () => {
   return (
     <Screen>
       <ScreenHeader
-        eyebrow="Grounded answers"
-        subtitle="Ask against the active lecture only. Every answer must come from uploaded local evidence or return an unsupported state."
+        eyebrow="Live audience Q&A"
+        subtitle="Ask what you missed or did not want to ask out loud. Answers cite uploaded lecture evidence, or clearly say when the material does not support the question."
         title="Ask"
       />
 
@@ -55,7 +55,7 @@ export const AskScreen = () => {
 
           <SectionCard
             subtitle="Short, grounded answers only. The app does not improvise beyond the uploaded lecture evidence."
-            title="Ask a Grounded Question"
+            title="Ask a lecture question"
             tone="accent"
           >
             <QuestionComposer
@@ -108,7 +108,7 @@ export const AskScreen = () => {
             />
           ) : null}
 
-          {recentHistory.length ? <Text style={styles.heading}>Recent Questions</Text> : null}
+          {recentHistory.length ? <Text style={styles.heading}>Previous questions</Text> : null}
 
           {recentHistory.map((item) => (
             <QuestionThreadCard

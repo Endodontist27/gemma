@@ -17,8 +17,8 @@ export const LiveScreen = () => {
     return (
       <Screen>
         <ScreenHeader
-          eyebrow="Live lecture context"
-          subtitle="Review the active lecture timeline, local summaries, and transcript evidence stored on device."
+          eyebrow="Lecture pulse"
+          subtitle="Review the active lecture snapshot, summaries, transcript evidence, and audience signal."
           title="Live"
         />
         <EmptyState
@@ -33,8 +33,8 @@ export const LiveScreen = () => {
     return (
       <Screen>
         <ScreenHeader
-          eyebrow="Live lecture context"
-          subtitle="Review the active lecture timeline, local summaries, and transcript evidence stored on device."
+          eyebrow="Lecture pulse"
+          subtitle="Review the active lecture snapshot, summaries, transcript evidence, and audience signal."
           title="Live"
         />
         <EmptyState
@@ -50,8 +50,8 @@ export const LiveScreen = () => {
   return (
     <Screen>
       <ScreenHeader
-        eyebrow="Live lecture context"
-        subtitle="Review the active lecture timeline, local summaries, and transcript evidence stored on device."
+        eyebrow="Lecture pulse"
+        subtitle="Review the active lecture snapshot, summaries, transcript evidence, and audience signal."
         title="Live"
       />
       <SectionCard>
@@ -59,14 +59,14 @@ export const LiveScreen = () => {
       </SectionCard>
 
       <SectionCard
-        subtitle={`Status: ${viewModel.overview.session.status.replace(/_/g, ' ')} | Pack: ${viewModel.overview.session.sourcePackVersion}`}
+        subtitle={`Status: ${viewModel.overview.session.status.replace(/_/g, ' ')} - Pack: ${viewModel.overview.session.sourcePackVersion}`}
         title="Session Snapshot"
       >
         <OverviewMetricGrid counts={viewModel.overview.counts} />
         <Text style={styles.meta}>
           Tags:{' '}
           {viewModel.overview.session.tags.length
-            ? viewModel.overview.session.tags.join(' | ')
+            ? viewModel.overview.session.tags.join(' - ')
             : 'none'}
         </Text>
       </SectionCard>

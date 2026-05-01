@@ -17,9 +17,10 @@ export const PrimaryButton = ({
   <Pressable
     disabled={disabled}
     onPress={onPress}
-    style={[
+    style={({ pressed }) => [
       styles.button,
       tone === 'secondary' ? styles.secondaryButton : styles.primaryButton,
+      pressed && !disabled ? styles.pressed : null,
       disabled ? styles.disabled : null,
     ]}
   >
@@ -33,26 +34,40 @@ export const PrimaryButton = ({
 
 const styles = StyleSheet.create({
   button: {
-    minHeight: 48,
-    borderRadius: 14,
+    minHeight: 50,
+    borderRadius: 17,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: 16,
+    paddingHorizontal: 18,
+    paddingVertical: 12,
   },
   primaryButton: {
     backgroundColor: themeColors.primary,
+    shadowColor: themeColors.primaryDeep,
+    shadowOpacity: 0.2,
+    shadowRadius: 12,
+    shadowOffset: {
+      width: 0,
+      height: 7,
+    },
+    elevation: 2,
   },
   secondaryButton: {
-    backgroundColor: themeColors.surface,
+    backgroundColor: '#ffffff',
     borderWidth: 1,
     borderColor: themeColors.borderStrong,
+  },
+  pressed: {
+    transform: [{ translateY: 1 }],
+    opacity: 0.9,
   },
   disabled: {
     opacity: 0.48,
   },
   label: {
     fontSize: 14,
-    fontWeight: '700',
+    fontWeight: '800',
+    letterSpacing: 0.1,
   },
   primaryLabel: {
     color: themeColors.surface,

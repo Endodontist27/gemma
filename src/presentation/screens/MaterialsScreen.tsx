@@ -19,12 +19,12 @@ export const MaterialsScreen = () => {
     <Screen>
       <ScreenHeader
         eyebrow="Lecture evidence"
-        subtitle="Browse the uploaded materials, searchable chunks, and glossary definitions that power grounded answers."
-        title="Materials"
+        subtitle="Browse the source library behind every answer: uploaded files, searchable chunks, glossary definitions, and bookmarks."
+        title="Sources"
       />
       {!viewModel.activeSessionId ? (
         <EmptyState
-          description="Pick an active session to browse its materials, glossary definitions, and saved bookmarks."
+          description="Pick an active workspace to browse its uploaded sources, glossary definitions, and bookmarks."
           title="Choose a session first"
         />
       ) : null}
@@ -45,7 +45,7 @@ export const MaterialsScreen = () => {
       {snapshot && snapshot.materials.length === 0 && snapshot.glossary.length === 0 ? (
         <EmptyState
           description="This session does not currently contain imported materials or glossary definitions."
-          title="No lecture evidence yet"
+          title="No sources imported yet"
         />
       ) : null}
 
@@ -129,10 +129,12 @@ const styles = StyleSheet.create({
     fontSize: 13,
   },
   chunk: {
-    borderTopWidth: 1,
-    borderTopColor: themeColors.border,
-    paddingTop: 12,
+    backgroundColor: '#f7fcfc',
+    borderColor: '#cfe4e7',
+    borderRadius: 16,
+    borderWidth: 1,
     gap: 8,
+    padding: 13,
   },
   chunkHeading: {
     color: themeColors.text,

@@ -25,16 +25,16 @@ export const EmptyState = ({ title, description, actionLabel, onAction }: EmptyS
 const styles = StyleSheet.create({
   container: {
     borderWidth: 1,
-    borderColor: themeColors.border,
-    borderRadius: 20,
+    borderColor: '#cfe4e7',
+    borderRadius: 24,
     padding: 18,
-    backgroundColor: themeColors.surfaceMuted,
-    gap: 8,
+    backgroundColor: '#fbffff',
+    gap: 9,
     ...cardShadow,
   },
   title: {
-    fontSize: 16,
-    fontWeight: '700',
+    fontSize: 17,
+    fontWeight: '800',
     color: themeColors.text,
   },
   description: {

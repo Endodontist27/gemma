@@ -46,7 +46,7 @@ const buildEvidenceUnitMetadata = (payload: EvidenceUnitAnswerSourcePayloadDto) 
     parts.push(formatSecondsAsTimestamp(payload.timestampStartSeconds));
   }
 
-  return parts.join(' | ');
+  return parts.join(' - ');
 };
 
 export const AnswerSourceDetailScreen = ({ answerSourceId }: { answerSourceId: string }) => {
@@ -65,7 +65,7 @@ export const AnswerSourceDetailScreen = ({ answerSourceId }: { answerSourceId: s
       <Screen>
         <ScreenHeader
           eyebrow="Answer traceability"
-          subtitle="Inspect the exact local lecture evidence used to support an answer."
+          subtitle="Inspect the exact lecture evidence used to support an answer."
           title="Answer Source"
         />
         <EmptyState
@@ -84,12 +84,12 @@ export const AnswerSourceDetailScreen = ({ answerSourceId }: { answerSourceId: s
     <Screen>
       <ScreenHeader
         eyebrow="Answer traceability"
-        subtitle="Review the cited excerpt and inspect the original local lecture evidence behind this answer."
+        subtitle="Review the cited excerpt, open the original source, bookmark it, or save a source-linked note."
         title={detail.answerSource.label}
       />
 
       <SectionCard
-        subtitle={`${getSourceTypeLabel(detail.sourceType)} | ${getGroundingStrengthLabel(detail.relevanceScore)}`}
+        subtitle={`${getSourceTypeLabel(detail.sourceType)} - ${getGroundingStrengthLabel(detail.relevanceScore)}`}
         title="Used in this answer"
       >
         <Text style={styles.body}>{detail.citedExcerpt}</Text>
@@ -102,7 +102,7 @@ export const AnswerSourceDetailScreen = ({ answerSourceId }: { answerSourceId: s
             <Text style={styles.body}>{detail.sourcePayload.definition}</Text>
             {detail.sourcePayload.aliases.length ? (
               <Text style={styles.meta}>
-                Aliases: {detail.sourcePayload.aliases.join(' | ')}
+                Aliases: {detail.sourcePayload.aliases.join(' - ')}
               </Text>
             ) : null}
           </>
@@ -115,7 +115,7 @@ export const AnswerSourceDetailScreen = ({ answerSourceId }: { answerSourceId: s
             <Text style={styles.body}>{detail.sourcePayload.text}</Text>
             {detail.sourcePayload.keywords.length ? (
               <Text style={styles.meta}>
-                Keywords: {detail.sourcePayload.keywords.join(' | ')}
+                Keywords: {detail.sourcePayload.keywords.join(' - ')}
               </Text>
             ) : null}
           </>
@@ -209,12 +209,13 @@ const styles = StyleSheet.create({
   input: {
     minHeight: 110,
     borderWidth: 1,
-    borderColor: themeColors.borderStrong,
-    borderRadius: 16,
-    padding: 14,
-    backgroundColor: themeColors.surface,
+    borderColor: '#a9d5d8',
+    borderRadius: 20,
+    padding: 16,
+    backgroundColor: '#ffffff',
     textAlignVertical: 'top',
     fontSize: 15,
+    lineHeight: 22,
     color: themeColors.text,
   },
   meta: {
@@ -233,7 +234,7 @@ const styles = StyleSheet.create({
   preview: {
     width: '100%',
     aspectRatio: 16 / 9,
-    borderRadius: 16,
+    borderRadius: 18,
     backgroundColor: themeColors.surfaceMuted,
   },
 });

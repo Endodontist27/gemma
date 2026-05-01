@@ -14,7 +14,7 @@ import { useSessionsViewModel } from '@presentation/view-models/useSessionsViewM
 const uploadHighlights = [
   'Lecture pack JSON for a ready-made session.',
   'Grounded files like PDF, PPTX, Markdown, TXT, CSV, and JSON.',
-  'Everything stays local and powers Ask, notes, and search.',
+  'One workspace powers Ask, notes, traceability, and review.',
 ];
 
 const runtimeToneMap = {
@@ -97,7 +97,7 @@ const getSessionSubtitle = (workspace: SessionWorkspaceItem) => {
   const hasRealLecturer = session.lecturer !== 'Imported lecture data';
 
   if (hasRealCourseCode && hasRealLecturer) {
-    return `${session.courseCode} · ${session.lecturer}`;
+    return `${session.courseCode} - ${session.lecturer}`;
   }
 
   if (sourceFiles.length) {
@@ -180,14 +180,14 @@ export const SessionsScreen = () => {
   return (
     <Screen>
       <ScreenHeader
-        eyebrow="Offline workspace"
-        subtitle="Build one local lecture workspace from your uploaded materials, then use it across Ask, notes, and review."
-        title="Lecture Sessions"
+        eyebrow="Lecture workspace"
+        subtitle="Upload the lecture files once. The audience can ask questions from the same searchable workspace during or after the session."
+        title="Workspace"
       />
 
       <SectionCard
-        subtitle="Start with a lecture pack if you already have one, or upload the source files that should power grounded answers."
-        title="Build your lecture workspace"
+        subtitle="Add slides, PDFs, notes, glossary files, or a complete lecture pack. All imports merge into the active workspace."
+        title="Add lecture material"
         tone="accent"
       >
         <View style={styles.actions}>
@@ -224,7 +224,7 @@ export const SessionsScreen = () => {
 
       <SectionCard
         subtitle="Answers stay grounded in the uploaded lecture files from your active workspace."
-        title="AI assistant"
+        title="Gemma assistant"
         tone="subtle"
       >
         <View style={styles.runtimeHeader}>
@@ -243,8 +243,8 @@ export const SessionsScreen = () => {
       </SectionCard>
 
       <SectionCard
-        subtitle="Choose the lecture workspace that should power every grounded answer and note."
-        title="Stored sessions"
+        subtitle="This app uses one active workspace for all uploaded files and every grounded answer."
+        title="Current workspace"
       >
         {viewModel.isLoading && !viewModel.sessionWorkspaces.length ? (
           <LoadingView message="Loading lecture sessions..." />
@@ -414,8 +414,8 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   activeSessionCard: {
-    borderColor: themeColors.primarySoft,
-    backgroundColor: themeColors.surfaceAccent,
+    borderColor: themeColors.accent,
+    backgroundColor: '#f4ffff',
   },
   description: {
     color: themeColors.textMuted,
@@ -428,9 +428,9 @@ const styles = StyleSheet.create({
     lineHeight: 19,
   },
   fileChip: {
-    backgroundColor: themeColors.surfaceMuted,
-    borderColor: themeColors.border,
-    borderRadius: 12,
+    backgroundColor: '#f7fcfc',
+    borderColor: '#cfe4e7',
+    borderRadius: 14,
     borderWidth: 1,
     maxWidth: '100%',
     paddingHorizontal: 12,
@@ -442,9 +442,9 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   fileCard: {
-    backgroundColor: themeColors.surfaceMuted,
-    borderColor: themeColors.border,
-    borderRadius: 14,
+    backgroundColor: '#f7fcfc',
+    borderColor: '#cfe4e7',
+    borderRadius: 16,
     borderWidth: 1,
     gap: 8,
     paddingHorizontal: 12,
@@ -484,8 +484,8 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   highlightTile: {
-    backgroundColor: '#f7fbff',
-    borderColor: '#d6e7ff',
+    backgroundColor: '#f8fffe',
+    borderColor: '#bfecea',
     borderRadius: 16,
     borderWidth: 1,
     paddingHorizontal: 14,
@@ -499,9 +499,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   sessionCard: {
-    backgroundColor: themeColors.surface,
-    borderColor: themeColors.border,
-    borderRadius: 18,
+    backgroundColor: '#ffffff',
+    borderColor: '#d0e4e7',
+    borderRadius: 22,
     borderWidth: 1,
     gap: 14,
     padding: 16,
@@ -532,7 +532,7 @@ const styles = StyleSheet.create({
     letterSpacing: -0.3,
   },
   tag: {
-    backgroundColor: themeColors.surfaceMuted,
+    backgroundColor: themeColors.primarySoft,
     borderRadius: 999,
     paddingHorizontal: 10,
     paddingVertical: 6,

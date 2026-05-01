@@ -38,11 +38,12 @@ export const QuestionThreadCard = ({
     category?.label ?? 'Uncategorized',
     getStateLabel(answer),
     formatDateTime(question.createdAt),
-  ].join(' | ');
+  ].join(' - ');
 
   return (
     <SectionCard subtitle={subtitle} title={question.text}>
       <Text style={styles.answer}>{answer?.text ?? 'No grounded answer stored yet.'}</Text>
+      {sources.length ? <Text style={styles.sourceHint}>Evidence used in this answer</Text> : null}
       {sources.length ? (
         <SourceList
           onSourcePress={onSourcePress}
@@ -56,8 +57,15 @@ export const QuestionThreadCard = ({
 
 const styles = StyleSheet.create({
   answer: {
-    color: '#0f172a',
+    color: '#0d2430',
     fontSize: 15,
-    lineHeight: 22,
+    lineHeight: 23,
+  },
+  sourceHint: {
+    color: '#075e73',
+    fontSize: 12,
+    fontWeight: '800',
+    letterSpacing: 0.4,
+    textTransform: 'uppercase',
   },
 });

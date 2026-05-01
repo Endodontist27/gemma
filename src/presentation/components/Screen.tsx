@@ -5,8 +5,13 @@ import { themeColors } from '@presentation/theme/tokens';
 
 export const Screen = ({ children }: PropsWithChildren) => (
   <SafeAreaView edges={['top']} style={styles.safeArea}>
+    <View pointerEvents="none" style={styles.backdrop}>
+      <View style={[styles.orb, styles.orbPrimary]} />
+      <View style={[styles.orb, styles.orbWarm]} />
+    </View>
     <ScrollView
       contentContainerStyle={styles.content}
+      keyboardShouldPersistTaps="handled"
       showsVerticalScrollIndicator={false}
       style={styles.scrollView}
     >
@@ -16,6 +21,10 @@ export const Screen = ({ children }: PropsWithChildren) => (
 );
 
 const styles = StyleSheet.create({
+  backdrop: {
+    ...StyleSheet.absoluteFillObject,
+    overflow: 'hidden',
+  },
   safeArea: {
     flex: 1,
     backgroundColor: themeColors.background,
@@ -24,11 +33,30 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   content: {
-    paddingHorizontal: 18,
-    paddingTop: 12,
+    paddingHorizontal: 16,
+    paddingTop: 10,
   },
   inner: {
-    gap: 18,
-    paddingBottom: 28,
+    gap: 16,
+    paddingBottom: 34,
+  },
+  orb: {
+    position: 'absolute',
+    borderRadius: 999,
+    opacity: 0.72,
+  },
+  orbPrimary: {
+    top: -110,
+    right: -96,
+    width: 230,
+    height: 230,
+    backgroundColor: themeColors.accentSoft,
+  },
+  orbWarm: {
+    top: 210,
+    left: -125,
+    width: 210,
+    height: 210,
+    backgroundColor: themeColors.warmSoft,
   },
 });

@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native';
 
 import type { SessionOverviewCountsDto } from '@application/dto/SessionOverviewDto';
+import { themeColors } from '@presentation/theme/tokens';
 
 interface OverviewMetricGridProps {
   counts: SessionOverviewCountsDto;
@@ -31,10 +32,10 @@ const styles = StyleSheet.create({
   card: {
     minWidth: '31%',
     flexGrow: 1,
-    borderRadius: 14,
+    borderRadius: 16,
     borderWidth: 1,
-    borderColor: '#dbe4f0',
-    backgroundColor: '#f8fafc',
+    borderColor: '#cfe4e7',
+    backgroundColor: '#f7fcfc',
     paddingHorizontal: 12,
     paddingVertical: 14,
     gap: 4,
@@ -45,12 +46,12 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   label: {
-    color: '#475569',
+    color: themeColors.textMuted,
     fontSize: 12,
     fontWeight: '600',
   },
   value: {
-    color: '#0f172a',
+    color: themeColors.primaryDeep,
     fontSize: 20,
     fontWeight: '800',
   },

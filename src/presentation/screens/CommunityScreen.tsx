@@ -11,13 +11,13 @@ export const CommunityScreen = () => {
   return (
     <Screen>
       <ScreenHeader
-        eyebrow="Shared grounded answers"
-        subtitle="Review the public grounded Q&A imported with the active lecture session."
+        eyebrow="Audience community"
+        subtitle="See questions other attendees chose to share, so the whole room can learn from the same grounded answers."
         title="Community"
       />
       {!viewModel.activeSessionId ? (
         <EmptyState
-          description="Choose an active session to review the shared grounded Q&A imported for it."
+          description="Choose an active workspace to review shared audience questions for this lecture."
           title="Choose a session first"
         />
       ) : null}
@@ -30,10 +30,10 @@ export const CommunityScreen = () => {
         <EmptyState
           actionLabel={viewModel.error ? 'Retry' : undefined}
           description={
-            viewModel.error ?? 'No public grounded Q&A has been imported for this session yet.'
+            viewModel.error ?? 'No audience questions have been shared for this session yet.'
           }
           onAction={viewModel.error ? viewModel.reloadCommunityFeed : undefined}
-          title="No shared Q&A available"
+          title="No shared questions yet"
         />
       ) : null}
 

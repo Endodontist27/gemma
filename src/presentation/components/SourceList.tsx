@@ -31,18 +31,20 @@ export const SourceList = ({ sources, onSourcePress, sourcePreviewById }: Source
           {preview ? (
             <Image resizeMode="cover" source={{ uri: preview.previewUri }} style={styles.preview} />
           ) : null}
-          <Text style={styles.label}>{source.label}</Text>
+          <View style={styles.headerRow}>
+            <Text style={styles.label}>{source.label}</Text>
+            {onSourcePress ? <Text style={styles.cta}>Open evidence</Text> : null}
+          </View>
           {preview ? (
             <>
               <Text style={styles.previewTitle}>{preview.title}</Text>
               <Text style={styles.previewMeta}>
                 {preview.assetFileName}
-                {preview.metadata ? ` | ${preview.metadata}` : ''}
+                {preview.metadata ? ` - ${preview.metadata}` : ''}
               </Text>
             </>
           ) : null}
           <Text style={styles.excerpt}>{source.excerpt}</Text>
-          {onSourcePress ? <Text style={styles.cta}>Inspect source</Text> : null}
         </Pressable>
       );
     })}
@@ -54,48 +56,63 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   sourceCard: {
-    borderRadius: 12,
-    backgroundColor: '#f8fafc',
+    borderRadius: 16,
+    backgroundColor: '#f7fcfc',
     borderWidth: 1,
-    borderColor: '#e2e8f0',
-    padding: 12,
-    gap: 4,
+    borderColor: '#cde4e7',
+    padding: 13,
+    gap: 7,
   },
   sourceCardInteractive: {
-    borderColor: themeColors.primarySoft,
+    borderColor: '#84d8d5',
+    shadowColor: themeColors.primaryDeep,
+    shadowOpacity: 0.06,
+    shadowRadius: 10,
+    shadowOffset: {
+      width: 0,
+      height: 5,
+    },
+    elevation: 1,
   },
   sourceCardPressed: {
     opacity: 0.8,
   },
+  headerRow: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: 10,
+    justifyContent: 'space-between',
+  },
   label: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#1e3a8a',
+    color: themeColors.primaryDeep,
+    flex: 1,
   },
   preview: {
     width: '100%',
     aspectRatio: 16 / 9,
-    borderRadius: 10,
-    backgroundColor: '#dbeafe',
+    borderRadius: 13,
+    backgroundColor: themeColors.primarySoft,
   },
   previewMeta: {
     fontSize: 12,
     lineHeight: 17,
-    color: '#64748b',
+    color: themeColors.textSubtle,
   },
   previewTitle: {
     fontSize: 13,
     fontWeight: '700',
-    color: '#0f172a',
+    color: themeColors.text,
   },
   excerpt: {
     fontSize: 13,
-    lineHeight: 18,
-    color: '#334155',
+    lineHeight: 19,
+    color: themeColors.textMuted,
   },
   cta: {
     color: themeColors.primary,
     fontSize: 12,
-    fontWeight: '700',
+    fontWeight: '800',
   },
 });

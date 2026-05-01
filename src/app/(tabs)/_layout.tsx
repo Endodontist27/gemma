@@ -2,6 +2,7 @@ import { Tabs } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 
 import { tabMetadata } from '@/app-shell/navigation/tabs';
+import { themeColors } from '@presentation/theme/tokens';
 
 export default function TabsLayout() {
   return (
@@ -10,9 +11,21 @@ export default function TabsLayout() {
         const metadata = tabMetadata[route.name] ?? { title: route.name, icon: 'ellipse-outline' };
 
         return {
+          headerShown: false,
           headerTitle: metadata.title,
-          tabBarActiveTintColor: '#1d4ed8',
-          tabBarInactiveTintColor: '#64748b',
+          tabBarActiveTintColor: themeColors.primary,
+          tabBarInactiveTintColor: themeColors.textSubtle,
+          tabBarLabelStyle: {
+            fontSize: 11,
+            fontWeight: '700',
+          },
+          tabBarStyle: {
+            backgroundColor: '#fbffff',
+            borderTopColor: '#d4e6e9',
+            height: 64,
+            paddingBottom: 8,
+            paddingTop: 6,
+          },
           tabBarIcon: ({ color, size }) => (
             <Ionicons color={color} name={metadata.icon} size={size} />
           ),

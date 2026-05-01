@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native';
 
 import type { TranscriptEntry } from '@domain/entities/TranscriptEntry';
+import { themeColors } from '@presentation/theme/tokens';
 import { formatSecondsAsTimestamp } from '@shared/utils/dates';
 
 interface TranscriptTimelineProps {
@@ -12,7 +13,7 @@ export const TranscriptTimeline = ({ entries }: TranscriptTimelineProps) => (
     {entries.map((entry) => (
       <View key={entry.id} style={styles.card}>
         <Text style={styles.meta}>
-          {formatSecondsAsTimestamp(entry.startedAtSeconds)} | {entry.speakerLabel}
+          {formatSecondsAsTimestamp(entry.startedAtSeconds)} - {entry.speakerLabel}
         </Text>
         <Text style={styles.body}>{entry.text}</Text>
       </View>
@@ -22,15 +23,15 @@ export const TranscriptTimeline = ({ entries }: TranscriptTimelineProps) => (
 
 const styles = StyleSheet.create({
   body: {
-    color: '#334155',
+    color: themeColors.textMuted,
     fontSize: 14,
     lineHeight: 20,
   },
   card: {
-    borderRadius: 12,
+    borderRadius: 16,
     borderWidth: 1,
-    borderColor: '#e2e8f0',
-    backgroundColor: '#f8fafc',
+    borderColor: '#cfe4e7',
+    backgroundColor: '#f7fcfc',
     padding: 12,
     gap: 6,
   },
@@ -38,7 +39,7 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   meta: {
-    color: '#1e3a8a',
+    color: themeColors.primary,
     fontSize: 12,
     fontWeight: '700',
   },
