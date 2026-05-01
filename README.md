@@ -33,12 +33,13 @@ This repository is prepared for the Kaggle Gemma 4 Good Hackathon. The code is p
 
 1. Clone the repository from `https://github.com/Endodontist27/gemma`.
 2. Run `npm install`.
-3. Run `npm run db:generate`.
-4. Download the official `google/gemma-4-E4B-it` model into `models/google/gemma-4-E4B-it/source/`.
-5. Run `npm run check`.
-6. Start the desktop demo bridge with `npm run model:desktop:bridge`.
-7. Run the Android emulator UI with `npm run android:dev`.
-8. Upload lecture files locally, ask audience-style clarification questions in the Ask tab, and inspect cited sources.
+3. Run `python -m pip install -r scripts/gemma/requirements.txt`.
+4. Run `npm run db:generate`.
+5. Download the official `google/gemma-4-E4B-it` model into `models/google/gemma-4-E4B-it/source/` with `npm run model:download:desktop`.
+6. Run `npm run check`.
+7. Start the desktop demo bridge with `npm run model:desktop:bridge`.
+8. Run the Android emulator UI with `npm run android:dev`.
+9. Upload lecture files locally, ask audience-style clarification questions in the Ask tab, and inspect cited sources.
 
 Submission materials are summarized in [COMPETITION_WRITEUP.md](./COMPETITION_WRITEUP.md) and [KAGGLE_SUBMISSION_CHECKLIST.md](./KAGGLE_SUBMISSION_CHECKLIST.md).
 
