@@ -1,4 +1,5 @@
 import type { GroundTruthUploadAsset } from '@shared/types/GroundTruthUploadAsset';
+import { buildDesktopBridgeBaseUrl } from '@infrastructure/gemma-runtime/desktopBridgeBaseUrl';
 import type { DesktopModelTarget } from '@shared/config/modelConfig';
 
 export interface DesktopBridgeEvidenceUnitPayload {
@@ -52,7 +53,7 @@ export class DesktopMultimodalBridgeClient {
   private readonly baseUrl: string;
 
   constructor(private readonly targetModel: DesktopModelTarget) {
-    this.baseUrl = `http://${targetModel.runtime.bridge.host}:${targetModel.runtime.bridge.port}`;
+    this.baseUrl = buildDesktopBridgeBaseUrl(targetModel);
   }
 
   async ingestAsset(

@@ -3,6 +3,7 @@ import { GemmaRuntimeError } from '@domain/service-contracts/GemmaRuntimeError';
 import type { GemmaRuntimeStatus } from '@domain/service-contracts/GemmaRuntimeStatus';
 import { isGemmaRuntimeReady } from '@domain/service-contracts/GemmaRuntimeStatus';
 import type { LLMGenerationInput } from '@domain/service-contracts/LLMService';
+import { buildDesktopBridgeBaseUrl } from '@infrastructure/gemma-runtime/desktopBridgeBaseUrl';
 import { createGemmaPrompt } from '@infrastructure/gemma-runtime/prompting';
 import type { DesktopModelTarget } from '@shared/config/modelConfig';
 import { logDev } from '@shared/utils/debug';
@@ -39,7 +40,7 @@ export class DesktopBridgeGemmaAdapter implements GemmaAdapter {
 
   constructor(private readonly targetModel: DesktopModelTarget) {
     this.modelId = targetModel.modelId;
-    this.baseUrl = `http://${targetModel.runtime.bridge.host}:${targetModel.runtime.bridge.port}`;
+    this.baseUrl = buildDesktopBridgeBaseUrl(targetModel);
   }
 
   private buildUnavailableStatus(message: string): GemmaRuntimeStatus {
