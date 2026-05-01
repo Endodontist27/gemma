@@ -3,7 +3,10 @@ import type { GemmaRuntimeStatus } from '@domain/service-contracts/GemmaRuntimeS
 import type { LLMGenerationInput } from '@domain/service-contracts/LLMService';
 
 const shouldPreferDesktopBridge = (status: GemmaRuntimeStatus) =>
-  status.code === 'emulator_not_supported';
+  status.code === 'emulator_not_supported' ||
+  status.code === 'source_missing' ||
+  status.code === 'artifact_missing' ||
+  status.code === 'device_model_missing';
 
 export class DevAwareGemmaAdapter implements GemmaAdapter {
   readonly provider = 'gemma' as const;
